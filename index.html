@@ -28,6 +28,15 @@
         
         /* Glassmorphism Animation */
         nav { transition: background-color 0.3s ease, backdrop-filter 0.3s ease; }
+        
+        /* Scrollbar hide for category tabs */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -36,7 +45,7 @@
     <nav class="bg-white/70 backdrop-blur-lg border-b border-white/20 sticky top-0 z-50 shadow-sm supports-[backdrop-filter]:bg-white/60">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center group">
+                <div class="flex items-center group cursor-pointer" onclick="window.location.reload()">
                     <!-- Icon dengan background tipis agar lebih pop-up -->
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-50 to-blue-100 flex items-center justify-center mr-3 shadow-inner group-hover:scale-105 transition-transform duration-300">
                         <i class="fa-solid fa-signal text-blue-600 text-lg"></i>
@@ -54,7 +63,7 @@
     </nav>
 
     <!-- ================= HERO SECTION ================= -->
-    <header class="gradient-header text-white py-16 -mt-[1px]"> <!-- Negative margin to blend border -->
+    <header class="gradient-header text-white py-12 md:py-16 -mt-[1px]"> 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-4">
             <h1 class="text-3xl md:text-5xl font-bold mb-4 drop-shadow-md">Paket Data XL Reguler</h1>
             <p class="text-blue-100 text-lg md:text-xl max-w-2xl mx-auto mb-8 font-light">
@@ -62,7 +71,7 @@
             </p>
             <div class="max-w-xl mx-auto relative group">
                 <div class="absolute -inset-1 bg-blue-300 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-200"></div>
-                <input type="text" id="searchInput" placeholder="Cari nama paket (contoh: Flex S, 65GB)..." 
+                <input type="text" id="searchInput" placeholder="Cari nama paket (contoh: 15GB)..." 
                     class="relative w-full px-6 py-4 rounded-full text-gray-800 shadow-xl focus:outline-none focus:ring-4 focus:ring-blue-400/50 transition placeholder-gray-400 border-none">
                 <button class="absolute right-3 top-3 bg-blue-600 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center hover:bg-blue-700 transition shadow-lg z-10">
                     <i class="fa-solid fa-search"></i>
@@ -72,7 +81,7 @@
     </header>
 
     <!-- ================= MAIN CONTENT ================= -->
-    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 w-full">
         
         <!-- Info Banner -->
         <div class="bg-white/80 backdrop-blur-sm border-l-4 border-yellow-400 p-4 mb-8 rounded-r-lg shadow-sm flex items-start sm:items-center gap-3">
@@ -84,11 +93,25 @@
             </div>
         </div>
 
+        <!-- Header Section: Title & Count -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
             <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
                 <i class="fa-solid fa-tags text-blue-600"></i> Daftar Produk
             </h2>
             <span class="text-sm font-medium text-blue-600 bg-blue-50 px-4 py-1.5 rounded-full shadow-sm border border-blue-100" id="productCount">Loading...</span>
+        </div>
+
+        <!-- NEW: Category Filter Tabs -->
+        <div class="flex space-x-2 mb-8 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0" id="categoryTabs">
+            <button onclick="filterCategory('all')" class="category-btn active whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 bg-blue-600 text-white shadow-md shadow-blue-200">
+                Semua Paket
+            </button>
+            <button onclick="filterCategory('flexmax')" class="category-btn whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:border-blue-300">
+                FlexMax
+            </button>
+            <button onclick="filterCategory('combo')" class="category-btn whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:border-blue-300">
+                Combo Flex
+            </button>
         </div>
 
         <!-- Grid Produk -->
@@ -102,7 +125,7 @@
                 <i class="fa-regular fa-folder-open text-gray-400 text-4xl"></i>
             </div>
             <h3 class="text-lg font-bold text-gray-900">Paket tidak ditemukan</h3>
-            <p class="text-gray-500 mt-1">Coba cari dengan kata kunci lain seperti "Flex" atau "GB".</p>
+            <p class="text-gray-500 mt-1">Coba cari dengan kata kunci lain atau ubah kategori.</p>
         </div>
     </main>
 
@@ -148,72 +171,84 @@
             {
                 id: 1,
                 name: "XL Xtra Combo Flex S 14 HARI",
+                category: "combo",
                 desc: "- Paket Resmi (OFFICIAL).\n- MASA AKTIF 14 HARI.\n- Kuota utama 3.5GB.\n- Tidak wajib ada pulsa.\n- Jika transaksi status GAGAL maka saldo panel akan otomatis di-refund.",
                 price: 23600
             },
             {
                 id: 2,
                 name: "XL Xtra Combo Flex S 21 Hari",
+                category: "combo",
                 desc: "- Paket Resmi (OFFICIAL).\n- MASA AKTIF 21 HARI.\n- Kuota utama 3.5GB.\n- Tidak wajib ada pulsa.\n- Jika transaksi status GAGAL maka saldo panel akan otomatis di-refund.",
                 price: 26600
             },
             {
                 id: 3,
                 name: "XL Xtra Combo Flex S+ 28 Hari",
+                category: "combo",
                 desc: "- Paket Resmi (OFFICIAL).\n- MASA AKTIF 28 HARI.\n- Kuota utama 3GB + Bonus Lokal.\n- Tidak wajib ada pulsa.\n- Full Reguler 24 Jam.",
                 price: 36500 
             },
             {
                 id: 12,
                 name: "XL Data FlexMax 6GB",
+                category: "flexmax",
                 desc: "- Tidak Semua Nomor bisa SUKSES.\n- TIDAK PERLU KODE OTP.\n- Paket Resmi (OFFICIAL) jalur Sidompul.\n- MASA AKTIF 28 HARI.\n- Bisa untuk semua Area.\n- Hanya bisa untuk XL Prepaid/Prabayar.\n- Kuota bersifat full reguler 24 jam.\n- Tidak wajib ada pulsa.\n- Masa aktif 28 hari.\n- Tidak ada bonus redeem.\n- Jika transaksi status GAGAL maka saldo panel akan otomatis di-refund.",
                 price: 32400 
             },
             {
                 id: 13,
                 name: "XL Data FlexMax 10GB",
+                category: "flexmax",
                 desc: "- Tidak Semua Nomor bisa SUKSES.\n- TIDAK PERLU KODE OTP.\n- Paket Resmi (OFFICIAL) jalur Sidompul.\n- MASA AKTIF 28 HARI.\n- Bisa untuk semua Area.\n- Hanya bisa untuk XL Prepaid/Prabayar.\n- Kuota bersifat full reguler 24 jam.\n- Tidak wajib ada pulsa.\n- Masa aktif 28 hari.\n- Tidak ada bonus redeem.\n- Jika transaksi status GAGAL maka saldo panel akan otomatis di-refund.",
                 price: 36600 
             },
             {
                 id: 14,
                 name: "XL Data FlexMax 15GB",
+                category: "flexmax",
                 desc: "- Tidak Semua Nomor bisa SUKSES.\n- TIDAK PERLU KODE OTP.\n- Paket Resmi (OFFICIAL) jalur Sidompul.\n- MASA AKTIF 28 HARI.\n- Bisa untuk semua Area.\n- Hanya bisa untuk XL Prepaid/Prabayar.\n- Kuota bersifat full reguler 24 jam.\n- Tidak wajib ada pulsa.\n- Masa aktif 28 hari.\n- Tidak ada bonus redeem.\n- Jika transaksi status GAGAL maka saldo panel akan otomatis di-refund.",
                 price: 39600 
             },
             {
                 id: 15,
                 name: "XL Data FlexMax 20GB",
+                category: "flexmax",
                 desc: "- Tidak Semua Nomor bisa SUKSES.\n- TIDAK PERLU KODE OTP.\n- Paket Resmi (OFFICIAL) jalur Sidompul.\n- MASA AKTIF 28 HARI.\n- Bisa untuk semua Area.\n- Hanya bisa untuk XL Prepaid/Prabayar.\n- Kuota bersifat full reguler 24 jam.\n- Tidak wajib ada pulsa.\n- Masa aktif 28 hari.\n- Tidak ada bonus redeem.\n- Jika transaksi status GAGAL maka saldo panel akan otomatis di-refund.",
                 price: 48600 
             },
             {
                 id: 16,
                 name: "XL Data FlexMax 25GB",
+                category: "flexmax",
                 desc: "- Tidak Semua Nomor bisa SUKSES.\n- TIDAK PERLU KODE OTP.\n- Paket Resmi (OFFICIAL) jalur Sidompul.\n- MASA AKTIF 28 HARI.\n- Bisa untuk semua Area.\n- Hanya bisa untuk XL Prepaid/Prabayar.\n- Kuota bersifat full reguler 24 jam.\n- Tidak wajib ada pulsa.\n- Masa aktif 28 hari.\n- Tidak ada bonus redeem.\n- Jika transaksi status GAGAL maka saldo panel akan otomatis di-refund.",
                 price: 59600 
             },
             {
                 id: 9,
                 name: "XL Data FlexMax 37GB",
+                category: "flexmax",
                 desc: "- TIDAK PERLU KODE OTP.\n- Paket Resmi (OFFICIAL) jalur Sidompul.\n- MASA AKTIF 28 HARI.\n- Kuota Full reguler 24 jam.\n- Tidak ada bonus redeem.\n- Jika transaksi status GAGAL maka saldo panel akan otomatis di-refund.",
                 price: 75000
             },
             {
                 id: 10,
                 name: "XL Data FlexMax 65 GB 28 Hari",
+                category: "flexmax",
                 desc: "- Kuota Utama 65GB 24 Jam (Nasional).\n- Tidak ada bonus redeem.\n- Masa aktif 28 hari.\n- Pastikan tidak ada paket FLEX jenis lainnya yang aktif agar aman.",
                 price: 98600
             },
             {
                 id: 11,
                 name: "XL Data FlexMax 80 GB 28 Hari",
+                category: "flexmax",
                 desc: "- Kuota Utama 80GB 24 Jam (Nasional).\n- Tidak ada bonus redeem.\n- Masa aktif 28 hari.\n- Disarankan habiskan kuota lama sebelum isi yang baru.",
                 price: 123600 
             },
             {
                 id: 17,
                 name: "XL Data FlexMax 150 GB 28 Hari",
+                category: "flexmax",
                 desc: "- Dapat digunakan untuk semua nomor XL Prabayar/Prepaid.\n- Jika ditimpa/ditumpuk dengan flex mania beda jenis, maka sisa kuota sebelumnya akan hangus dan tergantikan yang baru, lebih amannya disarankan habiskan kuota terlebih dahulu baru isi lagi jika ingin isi ulang kuota flex maxnya.\n- Pastikan tidak ada paket FLEX jenis lainnya yang aktif agar aman.\n- Kuota yang akan didapat: Kuota Utama 150GB 24 Jam (Nasional).\n- Tidak ada bonus redeem.\n- Masa aktif 28 hari.",
                 price: 147600 
             }
@@ -224,7 +259,10 @@
         const noResults = document.getElementById('noResults');
         const productCount = document.getElementById('productCount');
 
-        // Format Rupiah (Rp 23.600) - Untuk Tampilan
+        // State untuk Filter
+        let currentCategory = 'all';
+
+        // Format Rupiah
         const formatRupiah = (number) => {
             return new Intl.NumberFormat('id-ID', {
                 style: 'currency',
@@ -233,12 +271,12 @@
             }).format(number);
         };
 
-        // Format Angka (23.600) - Untuk WhatsApp
+        // Format Angka untuk WA
         const formatNumber = (number) => {
             return new Intl.NumberFormat('id-ID').format(number);
         };
 
-        // Format Deskripsi menjadi List
+        // Format Deskripsi
         const formatDescription = (text) => {
             if (!text) return '';
             const lines = text.split(/\n|- /).filter(line => line.trim() !== '');
@@ -258,15 +296,11 @@
             return html;
         };
 
-        // Fungsi Baru: Tampilkan Pilihan Order
+        // Fungsi Tampilkan Pilihan Order
         function showOrderOptions(productName, productPrice) {
             const formattedPrice = formatNumber(productPrice);
-            
-            // Link WhatsApp
             const waMessage = `Order ${productName} yg harga ${formattedPrice}`;
             const waLink = `https://wa.me/6282175037525?text=${encodeURIComponent(waMessage)}`;
-            
-            // Link Telegram (Ke Bot)
             const tgLink = `https://t.me/srpcomstorebot`;
 
             Swal.fire({
@@ -300,10 +334,59 @@
             });
         }
 
+        // --- CORE LOGIC BARU: FILTER CATEGORY ---
+        
+        function filterCategory(category) {
+            currentCategory = category;
+            
+            // Update Style Tombol Tab
+            const buttons = document.querySelectorAll('.category-btn');
+            buttons.forEach(btn => {
+                // Reset style ke inactive (putih)
+                btn.classList.remove('bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-200');
+                btn.classList.add('bg-white', 'text-gray-600', 'border', 'border-gray-200', 'hover:bg-gray-50');
+                
+                // Cek jika tombol ini yang diklik
+                if(btn.getAttribute('onclick').includes(`'${category}'`)) {
+                    btn.classList.remove('bg-white', 'text-gray-600', 'border', 'border-gray-200', 'hover:bg-gray-50');
+                    btn.classList.add('bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-200');
+                }
+            });
+
+            // Trigger re-render dengan search term yg mungkin masih ada
+            const searchTerm = searchInput.value.toLowerCase();
+            applyFilters(searchTerm);
+        }
+
+        // Fungsi Filter Gabungan (Search + Category)
+        function applyFilters(searchTerm) {
+            let filtered = products;
+
+            // 1. Filter by Category
+            if (currentCategory !== 'all') {
+                filtered = filtered.filter(p => {
+                    // Kita bisa pakai properti .category yg baru ditambahkan
+                    // Atau deteksi dari nama jika properti kosong
+                    const cat = p.category || (p.name.includes('FlexMax') ? 'flexmax' : 'combo');
+                    return cat === currentCategory;
+                });
+            }
+
+            // 2. Filter by Search Text
+            if (searchTerm) {
+                filtered = filtered.filter(product => 
+                    product.name.toLowerCase().includes(searchTerm) || 
+                    product.desc.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            renderProducts(filtered);
+        }
+
         // Render Produk
         const renderProducts = (data) => {
             productGrid.innerHTML = '';
-            productCount.textContent = `${data.length} Paket Tersedia`;
+            productCount.textContent = `${data.length} Paket`;
 
             if (data.length === 0) {
                 noResults.classList.remove('hidden');
@@ -314,17 +397,19 @@
 
             data.forEach(product => {
                 const card = document.createElement('div');
-                card.className = 'bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 flex flex-col transition-all duration-300 card-hover overflow-hidden relative group';
+                card.className = 'bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 flex flex-col transition-all duration-300 card-hover overflow-hidden relative group animate-fade-in';
                 
-                // Badge Kategori
+                // Badge Kategori Otomatis
                 let badge = '';
-                if(product.name.includes('FlexMax')) {
+                // Logic deteksi badge dari nama atau kategori
+                const isFlexMax = product.name.includes('FlexMax') || product.category === 'flexmax';
+                
+                if(isFlexMax) {
                     badge = '<span class="absolute top-0 right-0 bg-gradient-to-bl from-purple-100 to-white text-purple-700 text-[10px] font-bold px-3 py-1.5 rounded-bl-xl border-l border-b border-purple-50 shadow-sm">FlexMax</span>';
-                } else if (product.name.includes('Flex S')) {
+                } else {
                     badge = '<span class="absolute top-0 right-0 bg-gradient-to-bl from-blue-100 to-white text-blue-700 text-[10px] font-bold px-3 py-1.5 rounded-bl-xl border-l border-b border-blue-50 shadow-sm">Combo Flex</span>';
                 }
 
-                // Kita escape tanda petik untuk fungsi onclick
                 const safeName = product.name.replace(/'/g, "\\'");
 
                 card.innerHTML = `
@@ -334,7 +419,6 @@
                             <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-lg mr-4 shadow-lg shadow-blue-500/30 transform group-hover:rotate-6 transition-transform duration-300">
                                 XL
                             </div>
-                            <!-- JUDUL DENGAN CURSOR POINTER DAN ONCLICK -->
                             <h3 onclick="showOrderOptions('${safeName}', ${product.price})" 
                                 class="font-bold text-lg text-gray-800 leading-tight hover:text-blue-600 transition-colors cursor-pointer select-none">
                                 ${product.name}
@@ -352,8 +436,6 @@
                                 <p class="text-[11px] uppercase tracking-wider text-gray-400 font-semibold mb-1">Harga Terbaik</p>
                                 <p class="text-2xl font-bold text-gray-800">${formatRupiah(product.price)}</p>
                             </div>
-                            
-                            <!-- TOMBOL BELI JUGA MEMANGGIL FUNGSI YANG SAMA -->
                             <button onclick="showOrderOptions('${safeName}', ${product.price})" 
                                class="bg-green-500 hover:bg-green-600 text-white font-medium py-2.5 px-6 rounded-xl shadow-lg shadow-green-500/20 transition-all hover:-translate-y-1 flex items-center gap-2 group-btn">
                                 <i class="fa-brands fa-whatsapp text-lg"></i> 
@@ -366,7 +448,7 @@
             });
         };
 
-        // Fungsi Menampilkan Popup Cara Order (SweetAlert2)
+        // Fungsi Menampilkan Popup Cara Order
         function showCaraOrder() {
             Swal.fire({
                 title: '<span class="text-2xl font-bold text-gray-800">Cara Order</span>',
@@ -418,14 +500,9 @@
             });
         }
 
-        // Event Listener Search
+        // Event Listener Search (Updated to use Combined Filter)
         searchInput.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            const filteredProducts = products.filter(product => 
-                product.name.toLowerCase().includes(searchTerm) || 
-                product.desc.toLowerCase().includes(searchTerm)
-            );
-            renderProducts(filteredProducts);
+            applyFilters(e.target.value.toLowerCase());
         });
 
         // Initial Render
