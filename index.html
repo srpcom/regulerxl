@@ -305,6 +305,10 @@
                 
                 return matchCat && matchSearch && matchActive;
             });
+
+            // Urutkan termurah ke termahal
+            filtered.sort((a, b) => Number(a.price) - Number(b.price));
+
             renderProducts(filtered);
         }
 
