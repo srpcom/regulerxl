@@ -6,7 +6,7 @@
     <title>SRPCOM Store - Solusi Digital Terlengkap</title>
     
     <!-- Meta Tags -->
-    <meta name="description" content="Pusat belanja produk digital termurah: Paket Data, VPN Premium, Topup Game, dan Akun Streaming Terpercaya.">
+    <meta name="description" content="Pusat belanja produk digital termurah: Paket Data, VPN Premium, Masa Aktif, dan Akun Streaming Terpercaya.">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -99,7 +99,7 @@
         <!-- Background Pattern -->
         <div class="absolute top-0 left-0 w-full h-full opacity-10">
              <i class="fa-solid fa-wifi absolute top-10 left-10 text-6xl"></i>
-             <i class="fa-solid fa-gamepad absolute bottom-10 right-10 text-8xl"></i>
+             <i class="fa-solid fa-clock absolute bottom-10 right-10 text-8xl"></i>
              <i class="fa-solid fa-shield-halved absolute top-20 right-20 text-5xl"></i>
         </div>
 
@@ -107,11 +107,11 @@
             <span class="bg-red-500/30 text-red-50 py-1 px-3 rounded-full text-xs font-semibold mb-4 inline-block border border-red-400/30">Trusted Digital Store</span>
             <h1 class="text-3xl md:text-5xl font-bold mb-4 drop-shadow-xl tracking-tight">Solusi Kebutuhan Digital</h1>
             <p class="text-red-100 text-lg md:text-xl max-w-2xl mx-auto mb-8 font-light">
-                Menyediakan Paket Data, VPN Premium, Topup Game, dan Akun Streaming dengan harga terbaik.
+                Menyediakan Paket Data, VPN Premium, Perpanjang Masa Aktif, dan Akun Streaming.
             </p>
             <div class="max-w-xl mx-auto relative group">
                 <div class="absolute -inset-1 bg-red-500 rounded-full blur opacity-40 group-hover:opacity-60 transition duration-200"></div>
-                <input type="text" id="searchInput" placeholder="Cari produk (contoh: VPN, Mobile Legends, 15GB)..." 
+                <input type="text" id="searchInput" placeholder="Cari produk (contoh: Masa Aktif, VPN, 15GB)..." 
                     class="relative w-full px-6 py-4 rounded-full text-gray-800 shadow-xl focus:outline-none focus:ring-4 focus:ring-red-500/30 transition placeholder-gray-400 border-none">
                 <button class="absolute right-3 top-3 bg-red-600 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center hover:bg-red-700 transition shadow-lg z-10">
                     <i class="fa-solid fa-search"></i>
@@ -129,8 +129,8 @@
                 <i class="fa-solid fa-bullhorn text-lg"></i>
             </div>
             <div class="text-sm text-gray-600">
-                <span class="font-bold text-gray-800 block sm:inline mb-1 sm:mb-0">Update Terbaru:</span> 
-                Kini tersedia <span class="font-bold text-red-600">VPN Premium</span> & <span class="font-bold text-red-600">Topup Game</span>. Metode pembayaran QRIS otomatis.
+                <span class="font-bold text-gray-800 block sm:inline mb-1 sm:mb-0">Info Terbaru:</span> 
+                Ready <span class="font-bold text-red-600">Perpanjang Masa Aktif</span> & <span class="font-bold text-red-600">VPN Premium</span>. Proses cepat via Admin.
             </div>
         </div>
 
@@ -141,13 +141,13 @@
             <span class="text-xs font-bold text-red-600 bg-red-50 px-3 py-1.5 rounded-full border border-red-100" id="productCount">Loading...</span>
         </div>
 
-        <!-- Filter Tabs -->
+        <!-- Filter Tabs (Dynamic) -->
         <div class="flex space-x-2 mb-8 overflow-x-auto pb-4 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0" id="categoryTabs">
+            <!-- Tombol kategori akan digenerate otomatis oleh Javascript -->
             <button onclick="filterCategory('all')" class="category-btn cat-btn-active whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300">Semua</button>
-            <button onclick="filterCategory('internet')" class="category-btn cat-btn-inactive whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300"><i class="fa-solid fa-wifi mr-1"></i> Internet</button>
-            <button onclick="filterCategory('vpn')" class="category-btn cat-btn-inactive whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300"><i class="fa-solid fa-shield-halved mr-1"></i> VPN/SSH</button>
-            <button onclick="filterCategory('apps')" class="category-btn cat-btn-inactive whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300"><i class="fa-brands fa-youtube mr-1"></i> Akun Premium</button>
-            <button onclick="filterCategory('game')" class="category-btn cat-btn-inactive whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300"><i class="fa-solid fa-gamepad mr-1"></i> Games</button>
+            <!-- Loading placeholder -->
+            <div class="animate-pulse bg-gray-200 h-10 w-24 rounded-full"></div>
+            <div class="animate-pulse bg-gray-200 h-10 w-24 rounded-full"></div>
         </div>
 
         <!-- Loader & Grid -->
@@ -185,7 +185,7 @@
                     <span class="font-bold tracking-wide">Gabung Grup</span>
                 </a>
 
-                <!-- Tombol Hubungi Admin (NEW) -->
+                <!-- Tombol Hubungi Admin -->
                 <button onclick="showContactAdmin()" class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white text-gray-800 hover:bg-gray-100 border border-transparent hover:border-gray-300 transition-all flex items-center justify-center gap-3 group shadow-lg">
                     <i class="fa-solid fa-headset text-red-600 text-lg group-hover:scale-110 transition-transform"></i>
                     <span class="font-bold">Hubungi Admin</span>
@@ -213,6 +213,7 @@
         const productCount = document.getElementById('productCount');
         const loadingDiv = document.getElementById('loading');
         const adminPanel = document.getElementById('adminPanel');
+        const categoryTabsContainer = document.getElementById('categoryTabs');
 
         window.onload = () => { checkAdminHash(); fetchProducts(); };
         window.onhashchange = checkAdminHash;
@@ -315,6 +316,7 @@
                 const result = await response.json();
                 if (result.status === 'success') { 
                     products = result.data; 
+                    renderCategoryTabs(products); // Generate tabs dinamis
                     applyFilters(); 
                 } else { 
                     Swal.fire('Error', 'Gagal memuat data.', 'error'); 
@@ -343,7 +345,49 @@
             }
         }
 
-        // --- CRUD MODALS ---
+        // --- DYNAMIC TABS RENDERER (NEW) ---
+        function renderCategoryTabs(data) {
+            // Ambil semua kategori unik dari data produk
+            const uniqueCategories = [...new Set(data.map(p => {
+                // Normalisasi legacy data
+                if(!p.category || p.category === 'combo' || p.category === 'flexmax') return 'internet';
+                return p.category;
+            }))];
+
+            // Pastikan kategori utama selalu ada di urutan tertentu jika ada datanya
+            const priority = ['internet', 'masaaktif', 'vpn', 'apps'];
+            uniqueCategories.sort((a, b) => {
+                const idxA = priority.indexOf(a);
+                const idxB = priority.indexOf(b);
+                // Jika keduanya prioritas, urutkan sesuai index
+                if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+                // Jika A prioritas, B bukan, A duluan
+                if (idxA !== -1) return -1;
+                // Jika B prioritas, A bukan, B duluan
+                if (idxB !== -1) return 1;
+                // Sisanya alfabetis
+                return a.localeCompare(b);
+            });
+
+            // Mulai build HTML tab
+            let html = `<button onclick="filterCategory('all')" class="category-btn ${currentCategory === 'all' ? 'cat-btn-active' : 'cat-btn-inactive'} whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300">Semua</button>`;
+
+            uniqueCategories.forEach(cat => {
+                const style = getCategoryStyle(cat, null); // Dapatkan label & icon
+                const isActive = currentCategory === cat;
+                const activeClass = isActive ? 'cat-btn-active' : 'cat-btn-inactive';
+                
+                html += `
+                    <button onclick="filterCategory('${cat}')" class="category-btn ${activeClass} whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 capitalize">
+                        <i class="${style.icon} mr-1"></i> ${style.label}
+                    </button>
+                `;
+            });
+
+            categoryTabsContainer.innerHTML = html;
+        }
+
+        // --- CRUD MODALS (UPDATED FOR CUSTOM CATEGORY) ---
         function showAddProductModal() {
             openProductModal('Tambah Produk Baru', 'add');
         }
@@ -356,38 +400,71 @@
 
         function openProductModal(title, action, data = null) {
             let cat = data ? data.category : 'internet';
+            // Normalisasi
             if(cat === 'combo' || cat === 'flexmax') cat = 'internet'; 
+            
+            // Cek apakah kategori saat ini standar atau custom
+            const standardCats = ['internet', 'masaaktif', 'vpn', 'apps'];
+            const isCustom = !standardCats.includes(cat) && cat !== '' && cat !== undefined;
 
             Swal.fire({
                 title: title,
                 html: `
-                    <div class="space-y-3 mt-4">
-                        <input id="swal-name" class="swal2-input !m-0 !w-full" placeholder="Nama Produk (Mis: VPN SG 1 Bulan)" value="${data ? data.name : ''}">
+                    <div class="space-y-3 mt-4 text-left">
+                        <label class="text-xs font-bold text-gray-500 uppercase">Nama Produk</label>
+                        <input id="swal-name" class="swal2-input !m-0 !w-full" placeholder="Contoh: Perpanjang Masa Aktif 1 Bulan" value="${data ? data.name : ''}">
                         
-                        <select id="swal-category" class="swal2-input !m-0 !w-full">
+                        <label class="text-xs font-bold text-gray-500 uppercase mt-2 block">Kategori</label>
+                        <select id="swal-category-select" class="swal2-input !m-0 !w-full" onchange="toggleCustomCategory(this)">
                             <option value="internet" ${cat === 'internet' ? 'selected' : ''}>Internet (Data)</option>
+                            <option value="masaaktif" ${cat === 'masaaktif' ? 'selected' : ''}>Masa Aktif (Baru)</option>
                             <option value="vpn" ${cat === 'vpn' ? 'selected' : ''}>VPN / SSH</option>
-                            <option value="apps" ${cat === 'apps' ? 'selected' : ''}>Akun Premium (Netflix dll)</option>
-                            <option value="game" ${cat === 'game' ? 'selected' : ''}>Topup Game</option>
+                            <option value="apps" ${cat === 'apps' ? 'selected' : ''}>Akun Premium</option>
+                            <option value="custom" ${isCustom ? 'selected' : ''}>Lainnya (Tulis Baru...)</option>
                         </select>
                         
-                        <textarea id="swal-desc" class="swal2-textarea !m-0 !w-full" placeholder="Deskripsi (Gunakan enter untuk baris baru)" style="height:100px">${data ? data.desc : ''}</textarea>
+                        <div id="custom-cat-container" class="${isCustom ? '' : 'hidden'} mt-2">
+                             <input id="swal-category-custom" class="swal2-input !m-0 !w-full bg-gray-50 border-gray-300" placeholder="Masukkan nama kategori baru..." value="${isCustom ? cat : ''}">
+                        </div>
                         
+                        <label class="text-xs font-bold text-gray-500 uppercase mt-2 block">Deskripsi</label>
+                        <textarea id="swal-desc" class="swal2-textarea !m-0 !w-full" placeholder="Detail produk..." style="height:100px">${data ? data.desc : ''}</textarea>
+                        
+                        <label class="text-xs font-bold text-gray-500 uppercase mt-2 block">Harga</label>
                         <div class="relative">
                             <span class="absolute left-3 top-3 text-gray-500">Rp</span>
-                            <input id="swal-price" type="number" class="swal2-input !m-0 !w-full !pl-10" placeholder="Harga" value="${data ? data.price : ''}">
+                            <input id="swal-price" type="number" class="swal2-input !m-0 !w-full !pl-10" placeholder="0" value="${data ? data.price : ''}">
                         </div>
                     </div>
                 `,
                 focusConfirm: false, showCancelButton: true, confirmButtonText: 'Simpan', confirmButtonColor: '#dc2626',
+                didOpen: () => {
+                    // Helper function agar scope global swal bisa akses
+                    window.toggleCustomCategory = (el) => {
+                        const customInput = document.getElementById('custom-cat-container');
+                        if(el.value === 'custom') customInput.classList.remove('hidden');
+                        else customInput.classList.add('hidden');
+                    };
+                },
                 preConfirm: () => {
                     const name = document.getElementById('swal-name').value;
                     const price = document.getElementById('swal-price').value;
+                    const catSelect = document.getElementById('swal-category-select').value;
+                    let finalCategory = catSelect;
+
+                    if(catSelect === 'custom') {
+                        const customVal = document.getElementById('swal-category-custom').value;
+                        if(!customVal) return Swal.showValidationMessage('Nama Kategori baru wajib diisi');
+                        // Sanitasi input kategori (lowercase, no space recommend, but let's just trim)
+                        finalCategory = customVal.trim().toLowerCase().replace(/\s+/g, ''); 
+                        // Note: Sebaiknya simpan raw value atau slug, disini saya slugify sederhana
+                    }
+
                     if (!name || !price) return Swal.showValidationMessage('Nama dan Harga wajib diisi');
                     
                     return { 
                         name, 
-                        category: document.getElementById('swal-category').value, 
+                        category: finalCategory, 
                         desc: document.getElementById('swal-desc').value, 
                         price 
                     }
@@ -423,27 +500,33 @@
                 `<li class="flex items-start gap-2.5"><div class="mt-0.5 min-w-[16px]"><i class="fa-solid fa-check text-red-500 text-xs"></i></div><span class="flex-1 leading-relaxed">${l.replace(/^"|"$/g, '').trim()}</span></li>`).join('') + '</ul>';
         };
 
-        // Helper untuk tampilan Kategori (Modified for Red Theme)
+        // Helper untuk tampilan Kategori (Modified for Masa Aktif & Custom)
         function getCategoryStyle(cat, name) {
             // Support Legacy Data
             if(name && (name.includes('FlexMax') || cat === 'flexmax')) return { icon: 'fa-bolt', color: 'from-red-500 to-red-700', text: 'Internet', label: 'FlexMax' };
             if(name && (name.includes('Combo') || cat === 'combo')) return { icon: 'fa-signal', color: 'from-orange-500 to-orange-700', text: 'Internet', label: 'Combo Flex' };
 
             switch(cat) {
+                // Kategori Utama
+                case 'internet': return { icon: 'fa-wifi', color: 'from-red-600 to-red-800', text: 'Internet', label: 'Data Paket' };
+                case 'masaaktif': return { icon: 'fa-clock', color: 'from-amber-500 to-amber-700', text: 'Validity', label: 'Masa Aktif' };
                 case 'vpn': return { icon: 'fa-shield-halved', color: 'from-emerald-600 to-emerald-800', text: 'Security', label: 'VPN Premium' };
-                case 'game': return { icon: 'fa-gamepad', color: 'from-purple-600 to-purple-800', text: 'Games', label: 'Topup Game' };
                 case 'apps': return { icon: 'fa-brands fa-youtube', color: 'from-rose-500 to-rose-700', text: 'Streaming', label: 'Premium App' };
-                default: return { icon: 'fa-wifi', color: 'from-red-600 to-red-800', text: 'Internet', label: 'Data Paket' };
+                // Kategori Default untuk "Lainnya"
+                default: return { icon: 'fa-tag', color: 'from-slate-500 to-slate-700', text: 'Other', label: cat ? cat.charAt(0).toUpperCase() + cat.slice(1) : 'Lainnya' };
             }
         }
 
         function filterCategory(cat) {
             currentCategory = cat;
+            // Update UI Tab Styles (Manual update logic karena tombol digenerate ulang kadang2)
+            // Tapi karena renderCategoryTabs dipanggil saat fetch, kita cukup update class list disini
             document.querySelectorAll('.category-btn').forEach(btn => {
-                const isActive = btn.getAttribute('onclick').includes(`'${cat}'`);
+                // Cek onclick attribute string untuk mencocokkan kategori
+                const isActive = btn.getAttribute('onclick') === `filterCategory('${cat}')`;
                 btn.className = isActive 
-                    ? 'category-btn cat-btn-active whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300'
-                    : 'category-btn cat-btn-inactive whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300';
+                    ? 'category-btn cat-btn-active whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 capitalize'
+                    : 'category-btn cat-btn-inactive whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 capitalize';
             });
             applyFilters();
         }
@@ -452,14 +535,11 @@
             const term = searchInput.value.toLowerCase();
             let filtered = products.filter(p => {
                 let pCat = p.category;
-                if(!pCat) {
-                    if(p.name.includes('FlexMax') || p.name.includes('Combo')) pCat = 'internet';
-                    else pCat = 'internet'; 
-                }
+                // Normalisasi legacy
+                if(!pCat || pCat === 'flexmax' || pCat === 'combo') pCat = 'internet'; 
                 
                 let matchCat = false;
                 if(currentCategory === 'all') matchCat = true;
-                else if (currentCategory === 'internet') matchCat = (pCat === 'internet' || pCat === 'flexmax' || pCat === 'combo');
                 else matchCat = (pCat === currentCategory);
 
                 const matchSearch = (p.name && p.name.toLowerCase().includes(term)) || (p.desc && p.desc.toLowerCase().includes(term));
@@ -537,7 +617,6 @@
             const formattedPrice = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(price);
             const waMessage = `Halo Admin SRPCOM, saya sudah transfer senilai ${formattedPrice} untuk pembelian: *${name}*. Mohon diproses.`;
             const waLink = `https://wa.me/6282175037525?text=${encodeURIComponent(waMessage)}`;
-            // UPDATED LINK TO ADMIN
             const tgLink = `https://t.me/srpcomadmin`; 
 
             Swal.fire({
@@ -566,7 +645,7 @@
             });
         }
 
-        // FUNGSI HUBUNGI ADMIN (NEW)
+        // FUNGSI HUBUNGI ADMIN
         function showContactAdmin() {
             Swal.fire({
                 title: '<span class="text-xl font-bold text-gray-800">Hubungi Admin</span>',
