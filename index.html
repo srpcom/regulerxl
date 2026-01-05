@@ -67,7 +67,7 @@
         <button onclick="changePasswordModal()" class="bg-yellow-500 hover:bg-yellow-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-110 tooltip" title="Ganti Password">
             <i class="fa-solid fa-key text-xl"></i>
         </button>
-        <!-- Tombol Kelola Kategori (NEW) -->
+        <!-- Tombol Kelola Kategori -->
         <button onclick="showCategoryManager()" class="bg-indigo-600 hover:bg-indigo-700 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-110 tooltip" title="Kelola Kategori">
             <i class="fa-solid fa-tags text-xl"></i>
         </button>
@@ -357,7 +357,7 @@
             }
         }
 
-        // --- CATEGORY MANAGEMENT (NEW FEATURE) ---
+        // --- CATEGORY MANAGEMENT ---
         function getUniqueCategories(data) {
             return [...new Set(data.map(p => {
                 if(!p.category || p.category === 'combo' || p.category === 'flexmax') return 'internet';
@@ -433,12 +433,7 @@
         }
 
         function handleDeleteCategory(catToDelete) {
-            // Kita tidak bisa sekedar hapus, karena produk akan "hilang" (kategori kosong).
-            // Jadi kita tawarkan untuk memindahkan isinya ke kategori lain.
-            
-            // Dapatkan list kategori lain sebagai tujuan
             const otherCats = getUniqueCategories(products).filter(c => c !== catToDelete);
-            // Tambahkan opsi 'lainnya' jika belum ada
             if(!otherCats.includes('lainnya')) otherCats.push('lainnya');
             
             let optionsHtml = otherCats.map(c => `<option value="${c}">${c}</option>`).join('');
@@ -514,9 +509,7 @@
             let cat = data ? data.category : 'internet';
             if(cat === 'combo' || cat === 'flexmax') cat = 'internet'; 
             
-            // Get existing categories for dropdown
             const existingCats = getUniqueCategories(products);
-            // Ensure standard cats exist in dropdown
             const standardCats = ['internet', 'masaaktif', 'vpn', 'apps'];
             standardCats.forEach(c => { if(!existingCats.includes(c)) existingCats.push(c); });
             
@@ -804,6 +797,14 @@
                             <div class="text-left">
                                 <p class="text-xs text-gray-500 font-medium">Layanan OTP</p>
                                 <p class="font-bold text-gray-800">Minta OTP</p>
+                            </div>
+                        </a>
+                        <!-- New Button Tutorial OpenWRT -->
+                        <a href="https://t.me/srpcomchannel/259" target="_blank" class="flex items-center gap-4 p-4 rounded-xl bg-orange-50 border border-orange-100 hover:bg-orange-100 transition group">
+                            <div class="w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition-transform"><i class="fa-solid fa-book-open"></i></div>
+                            <div class="text-left">
+                                <p class="text-xs text-gray-500 font-medium">Panduan Lengkap</p>
+                                <p class="font-bold text-gray-800">Tutorial OpenWRT</p>
                             </div>
                         </a>
                     </div>
