@@ -67,6 +67,10 @@
         <button onclick="changePasswordModal()" class="bg-yellow-500 hover:bg-yellow-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-110 tooltip" title="Ganti Password">
             <i class="fa-solid fa-key text-xl"></i>
         </button>
+        <!-- Tombol Kelola Kategori (NEW) -->
+        <button onclick="showCategoryManager()" class="bg-indigo-600 hover:bg-indigo-700 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-110 tooltip" title="Kelola Kategori">
+            <i class="fa-solid fa-tags text-xl"></i>
+        </button>
         <!-- Tombol Logout -->
         <button onclick="logoutAdmin()" class="bg-gray-600 hover:bg-gray-700 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-110 tooltip" title="Logout">
             <i class="fa-solid fa-right-from-bracket text-xl"></i>
@@ -193,7 +197,7 @@
                     <span class="font-bold">Hubungi Admin</span>
                 </button>
                 
-                <!-- Tombol Tools (NEW) -->
+                <!-- Tombol Tools -->
                 <button onclick="showTools()" class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-gray-800 hover:bg-black text-white border border-gray-700 hover:border-gray-900 transition-all flex items-center justify-center gap-3 group shadow-lg">
                     <i class="fa-solid fa-toolbox text-red-500 text-lg group-hover:scale-110 transition-transform"></i>
                     <span class="font-bold">Tools</span>
@@ -324,7 +328,7 @@
                 const result = await response.json();
                 if (result.status === 'success') { 
                     products = result.data; 
-                    renderCategoryTabs(products); // Generate tabs dinamis
+                    renderCategoryTabs(products); 
                     applyFilters(); 
                 } else { 
                     Swal.fire('Error', 'Gagal memuat data.', 'error'); 
@@ -344,7 +348,7 @@
                 const result = await response.json();
 
                 if (result.status === 'success') {
-                    setTimeout(() => { Swal.fire('Sukses', successMsg, 'success'); fetchProducts(); }, 1000);
+                    setTimeout(() => { Swal.fire('Sukses', successMsg || result.message, 'success'); fetchProducts(); }, 1000);
                 } else {
                     Swal.fire('Gagal', result.message, 'error');
                 }
@@ -353,35 +357,135 @@
             }
         }
 
-        // --- DYNAMIC TABS RENDERER (NEW) ---
-        function renderCategoryTabs(data) {
-            // Ambil semua kategori unik dari data produk
-            const uniqueCategories = [...new Set(data.map(p => {
-                // Normalisasi legacy data
+        // --- CATEGORY MANAGEMENT (NEW FEATURE) ---
+        function getUniqueCategories(data) {
+            return [...new Set(data.map(p => {
                 if(!p.category || p.category === 'combo' || p.category === 'flexmax') return 'internet';
                 return p.category;
-            }))];
+            }))].sort();
+        }
 
-            // Pastikan kategori utama selalu ada di urutan tertentu jika ada datanya
+        function showCategoryManager() {
+            const uniqueCats = getUniqueCategories(products);
+            
+            // Build list HTML
+            let listHtml = `<div class="flex flex-col gap-2 mt-4 max-h-[300px] overflow-y-auto pr-2">`;
+            
+            uniqueCats.forEach(cat => {
+                // Tentukan nama tampilan
+                let displayName = cat.charAt(0).toUpperCase() + cat.slice(1);
+                const style = getCategoryStyle(cat, null);
+                if(style.text !== 'Other') displayName = style.label;
+
+                listHtml += `
+                    <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-200">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-br ${style.color} flex items-center justify-center text-white text-xs">
+                                <i class="${style.icon}"></i>
+                            </div>
+                            <span class="text-sm font-bold text-gray-700 capitalize">${cat} (${displayName})</span>
+                        </div>
+                        <div class="flex gap-1">
+                            <button onclick="handleRenameCategory('${cat}')" class="w-8 h-8 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition" title="Ganti Nama"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="handleDeleteCategory('${cat}')" class="w-8 h-8 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition" title="Hapus/Pindahkan"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+            listHtml += `</div>`;
+            
+            if(uniqueCats.length === 0) listHtml = '<p class="text-center text-gray-500 my-4">Belum ada kategori.</p>';
+
+            Swal.fire({
+                title: '<span class="text-xl font-bold">Kelola Kategori</span>',
+                html: `
+                    <p class="text-xs text-gray-500 mb-2">Ubah nama kategori atau hapus (pindahkan isi) kategori.</p>
+                    ${listHtml}
+                `,
+                showConfirmButton: false,
+                showCloseButton: true,
+                width: '500px'
+            });
+        }
+
+        function handleRenameCategory(oldCat) {
+            Swal.fire({
+                title: `Ganti nama '${oldCat}'`,
+                input: 'text',
+                inputValue: oldCat,
+                inputPlaceholder: 'Nama Kategori Baru',
+                showCancelButton: true,
+                confirmButtonText: 'Simpan',
+                confirmButtonColor: '#3b82f6',
+                preConfirm: (val) => {
+                    if (!val) return Swal.showValidationMessage("Nama tidak boleh kosong");
+                    return val.toLowerCase().trim().replace(/\s+/g, '');
+                }
+            }).then((result) => {
+                if (result.isConfirmed && result.value !== oldCat) {
+                    postData({ 
+                        action: 'massUpdateCategory', 
+                        oldCategory: oldCat, 
+                        newCategory: result.value 
+                    }, `Kategori diubah jadi '${result.value}'`);
+                }
+            });
+        }
+
+        function handleDeleteCategory(catToDelete) {
+            // Kita tidak bisa sekedar hapus, karena produk akan "hilang" (kategori kosong).
+            // Jadi kita tawarkan untuk memindahkan isinya ke kategori lain.
+            
+            // Dapatkan list kategori lain sebagai tujuan
+            const otherCats = getUniqueCategories(products).filter(c => c !== catToDelete);
+            // Tambahkan opsi 'lainnya' jika belum ada
+            if(!otherCats.includes('lainnya')) otherCats.push('lainnya');
+            
+            let optionsHtml = otherCats.map(c => `<option value="${c}">${c}</option>`).join('');
+
+            Swal.fire({
+                title: `Hapus Kategori '${catToDelete}'?`,
+                html: `
+                    <p class="text-sm text-gray-600 mb-4">Produk di dalam kategori ini harus dipindahkan agar tidak hilang.</p>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Pindahkan produk ke:</label>
+                    <select id="move-target" class="swal2-input !m-0 !w-full mt-1">
+                        ${optionsHtml}
+                    </select>
+                `,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Pindahkan & Hapus',
+                confirmButtonColor: '#dc2626',
+                preConfirm: () => document.getElementById('move-target').value
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    postData({ 
+                        action: 'massUpdateCategory', 
+                        oldCategory: catToDelete, 
+                        newCategory: result.value 
+                    }, `Produk dipindah ke '${result.value}'`);
+                }
+            });
+        }
+
+        // --- DYNAMIC TABS RENDERER ---
+        function renderCategoryTabs(data) {
+            const uniqueCategories = getUniqueCategories(data);
+            
             const priority = ['internet', 'masaaktif', 'vpn', 'apps'];
             uniqueCategories.sort((a, b) => {
                 const idxA = priority.indexOf(a);
                 const idxB = priority.indexOf(b);
-                // Jika keduanya prioritas, urutkan sesuai index
                 if (idxA !== -1 && idxB !== -1) return idxA - idxB;
-                // Jika A prioritas, B bukan, A duluan
                 if (idxA !== -1) return -1;
-                // Jika B prioritas, A bukan, B duluan
                 if (idxB !== -1) return 1;
-                // Sisanya alfabetis
                 return a.localeCompare(b);
             });
 
-            // Mulai build HTML tab
             let html = `<button onclick="filterCategory('all')" class="category-btn ${currentCategory === 'all' ? 'cat-btn-active' : 'cat-btn-inactive'} whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300">Semua</button>`;
 
             uniqueCategories.forEach(cat => {
-                const style = getCategoryStyle(cat, null); // Dapatkan label & icon
+                const style = getCategoryStyle(cat, null); 
                 const isActive = currentCategory === cat;
                 const activeClass = isActive ? 'cat-btn-active' : 'cat-btn-inactive';
                 
@@ -395,7 +499,7 @@
             categoryTabsContainer.innerHTML = html;
         }
 
-        // --- CRUD MODALS (UPDATED FOR CUSTOM CATEGORY) ---
+        // --- CRUD MODALS ---
         function showAddProductModal() {
             openProductModal('Tambah Produk Baru', 'add');
         }
@@ -408,12 +512,19 @@
 
         function openProductModal(title, action, data = null) {
             let cat = data ? data.category : 'internet';
-            // Normalisasi
             if(cat === 'combo' || cat === 'flexmax') cat = 'internet'; 
             
-            // Cek apakah kategori saat ini standar atau custom
+            // Get existing categories for dropdown
+            const existingCats = getUniqueCategories(products);
+            // Ensure standard cats exist in dropdown
             const standardCats = ['internet', 'masaaktif', 'vpn', 'apps'];
-            const isCustom = !standardCats.includes(cat) && cat !== '' && cat !== undefined;
+            standardCats.forEach(c => { if(!existingCats.includes(c)) existingCats.push(c); });
+            
+            let catOptions = existingCats.map(c => 
+                `<option value="${c}" ${cat === c ? 'selected' : ''}>${c.charAt(0).toUpperCase() + c.slice(1)}</option>`
+            ).join('');
+            
+            catOptions += `<option value="custom">Lainnya (Tulis Baru...)</option>`;
 
             Swal.fire({
                 title: title,
@@ -424,15 +535,11 @@
                         
                         <label class="text-xs font-bold text-gray-500 uppercase mt-2 block">Kategori</label>
                         <select id="swal-category-select" class="swal2-input !m-0 !w-full" onchange="toggleCustomCategory(this)">
-                            <option value="internet" ${cat === 'internet' ? 'selected' : ''}>Internet (Data)</option>
-                            <option value="masaaktif" ${cat === 'masaaktif' ? 'selected' : ''}>Masa Aktif (Baru)</option>
-                            <option value="vpn" ${cat === 'vpn' ? 'selected' : ''}>VPN / SSH</option>
-                            <option value="apps" ${cat === 'apps' ? 'selected' : ''}>Akun Premium</option>
-                            <option value="custom" ${isCustom ? 'selected' : ''}>Lainnya (Tulis Baru...)</option>
+                            ${catOptions}
                         </select>
                         
-                        <div id="custom-cat-container" class="${isCustom ? '' : 'hidden'} mt-2">
-                             <input id="swal-category-custom" class="swal2-input !m-0 !w-full bg-gray-50 border-gray-300" placeholder="Masukkan nama kategori baru..." value="${isCustom ? cat : ''}">
+                        <div id="custom-cat-container" class="hidden mt-2">
+                             <input id="swal-category-custom" class="swal2-input !m-0 !w-full bg-gray-50 border-gray-300" placeholder="Masukkan nama kategori baru...">
                         </div>
                         
                         <label class="text-xs font-bold text-gray-500 uppercase mt-2 block">Deskripsi</label>
@@ -447,7 +554,6 @@
                 `,
                 focusConfirm: false, showCancelButton: true, confirmButtonText: 'Simpan', confirmButtonColor: '#dc2626',
                 didOpen: () => {
-                    // Helper function agar scope global swal bisa akses
                     window.toggleCustomCategory = (el) => {
                         const customInput = document.getElementById('custom-cat-container');
                         if(el.value === 'custom') customInput.classList.remove('hidden');
@@ -463,9 +569,7 @@
                     if(catSelect === 'custom') {
                         const customVal = document.getElementById('swal-category-custom').value;
                         if(!customVal) return Swal.showValidationMessage('Nama Kategori baru wajib diisi');
-                        // Sanitasi input kategori (lowercase, no space recommend, but let's just trim)
                         finalCategory = customVal.trim().toLowerCase().replace(/\s+/g, ''); 
-                        // Note: Sebaiknya simpan raw value atau slug, disini saya slugify sederhana
                     }
 
                     if (!name || !price) return Swal.showValidationMessage('Nama dan Harga wajib diisi');
@@ -508,29 +612,22 @@
                 `<li class="flex items-start gap-2.5"><div class="mt-0.5 min-w-[16px]"><i class="fa-solid fa-check text-red-500 text-xs"></i></div><span class="flex-1 leading-relaxed">${l.replace(/^"|"$/g, '').trim()}</span></li>`).join('') + '</ul>';
         };
 
-        // Helper untuk tampilan Kategori (Modified for Masa Aktif & Custom)
         function getCategoryStyle(cat, name) {
-            // Support Legacy Data
             if(name && (name.includes('FlexMax') || cat === 'flexmax')) return { icon: 'fa-bolt', color: 'from-red-500 to-red-700', text: 'Internet', label: 'FlexMax' };
             if(name && (name.includes('Combo') || cat === 'combo')) return { icon: 'fa-signal', color: 'from-orange-500 to-orange-700', text: 'Internet', label: 'Combo Flex' };
 
             switch(cat) {
-                // Kategori Utama
                 case 'internet': return { icon: 'fa-wifi', color: 'from-red-600 to-red-800', text: 'Internet', label: 'Data Paket' };
                 case 'masaaktif': return { icon: 'fa-clock', color: 'from-amber-500 to-amber-700', text: 'Validity', label: 'Masa Aktif' };
                 case 'vpn': return { icon: 'fa-shield-halved', color: 'from-emerald-600 to-emerald-800', text: 'Security', label: 'VPN Premium' };
                 case 'apps': return { icon: 'fa-brands fa-youtube', color: 'from-rose-500 to-rose-700', text: 'Streaming', label: 'Premium App' };
-                // Kategori Default untuk "Lainnya"
                 default: return { icon: 'fa-tag', color: 'from-slate-500 to-slate-700', text: 'Other', label: cat ? cat.charAt(0).toUpperCase() + cat.slice(1) : 'Lainnya' };
             }
         }
 
         function filterCategory(cat) {
             currentCategory = cat;
-            // Update UI Tab Styles (Manual update logic karena tombol digenerate ulang kadang2)
-            // Tapi karena renderCategoryTabs dipanggil saat fetch, kita cukup update class list disini
             document.querySelectorAll('.category-btn').forEach(btn => {
-                // Cek onclick attribute string untuk mencocokkan kategori
                 const isActive = btn.getAttribute('onclick') === `filterCategory('${cat}')`;
                 btn.className = isActive 
                     ? 'category-btn cat-btn-active whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 capitalize'
@@ -543,7 +640,6 @@
             const term = searchInput.value.toLowerCase();
             let filtered = products.filter(p => {
                 let pCat = p.category;
-                // Normalisasi legacy
                 if(!pCat || pCat === 'flexmax' || pCat === 'combo') pCat = 'internet'; 
                 
                 let matchCat = false;
@@ -572,7 +668,6 @@
                 const style = getCategoryStyle(p.category, p.name);
                 const safeName = p.name ? p.name.replace(/'/g, "\\'") : 'Tanpa Nama';
                 
-                // Admin Controls
                 let adminControls = '';
                 if (isAdmin) {
                     const statusBtn = isActive 
@@ -653,7 +748,6 @@
             });
         }
 
-        // FUNGSI HUBUNGI ADMIN
         function showContactAdmin() {
             Swal.fire({
                 title: '<span class="text-xl font-bold text-gray-800">Hubungi Admin</span>',
@@ -686,7 +780,6 @@
             });
         }
         
-        // FUNGSI TOOLS (NEW)
         function showTools() {
             Swal.fire({
                 title: '<span class="text-xl font-bold text-gray-800">Tools & Utilities</span>',
