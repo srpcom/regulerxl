@@ -22,43 +22,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #fef2f2; } /* Red-50 tint */
+        body { font-family: 'Inter', sans-serif; background-color: #fef2f2; }
         .card-hover { transition: all 0.3s ease; }
         .card-hover:hover { transform: translateY(-4px); box-shadow: 0 10px 25px -5px rgba(220, 38, 38, 0.15); }
-        
-        /* New Gradient for General Store (Red Theme) */
         .gradient-header { background: linear-gradient(135deg, #991b1b 0%, #ef4444 100%); }
-        
         .swal2-html-container { text-align: left !important; }
         .swal2-popup { border-radius: 1rem !important; }
         nav { transition: background-color 0.3s ease, backdrop-filter 0.3s ease; }
-        
         .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #dc2626; /* Red-600 */
-            border-radius: 50%;
-            width: 40px; height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
+            border: 4px solid #f3f3f3; border-top: 4px solid #dc2626; border-radius: 50%;
+            width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-
-        .item-hidden {
-            opacity: 0.6;
-            filter: grayscale(100%);
-            background-color: #f3f4f6;
-            border: 2px dashed #cbd5e1;
-        }
-
-        /* Category Button Styles (Red Theme) */
+        .item-hidden { opacity: 0.6; filter: grayscale(100%); background-color: #f3f4f6; border: 2px dashed #cbd5e1; }
         .cat-btn-active { background-color: #dc2626; color: white; box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.3); }
         .cat-btn-inactive { background-color: white; color: #475569; border: 1px solid #e2e8f0; }
         .cat-btn-inactive:hover { background-color: #fef2f2; border-color: #fca5a5; }
-
-        /* Maintenance Animation */
         .wrench-anim { animation: wrench 2.5s ease infinite; }
         @keyframes wrench { 0%{transform:rotate(-12deg)} 8%{transform:rotate(12deg)} 10%{transform:rotate(24deg)} 18%{transform:rotate(-24deg)} 20%{transform:rotate(-24deg)} 28%{transform:rotate(24deg)} 30%{transform:rotate(24deg)} 38%{transform:rotate(-24deg)} 40%{transform:rotate(-24deg)} 48%{transform:rotate(24deg)} 50%{transform:rotate(24deg)} 58%{transform:rotate(-24deg)} 60%{transform:rotate(-24deg)} 68%{transform:rotate(24deg)} 75%{transform:rotate(0deg)} }
     </style>
@@ -71,56 +52,27 @@
             <i class="fa-solid fa-screwdriver-wrench text-5xl text-red-600 wrench-anim"></i>
         </div>
         <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-3">Sedang Dalam Perbaikan</h1>
-        <p class="text-gray-600 max-w-md text-lg leading-relaxed">
-            Maaf, toko kami sedang melakukan peningkatan sistem untuk pelayanan yang lebih baik. Silakan kembali lagi beberapa saat lagi.
-        </p>
+        <p class="text-gray-600 max-w-md text-lg leading-relaxed">Maaf, toko kami sedang melakukan peningkatan sistem. Silakan kembali lagi beberapa saat lagi.</p>
         <div class="mt-8 flex gap-4">
-             <a href="https://t.me/srpcomadmin" class="px-6 py-2.5 rounded-full bg-white border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition shadow-sm">
-                Hubungi Admin
-            </a>
-            <button onclick="window.location.reload()" class="px-6 py-2.5 rounded-full bg-red-600 text-white font-medium hover:bg-red-700 transition shadow-lg shadow-red-500/30">
-                Coba Refresh
-            </button>
+             <a href="https://t.me/srpcomadmin" class="px-6 py-2.5 rounded-full bg-white border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition shadow-sm">Hubungi Admin</a>
+            <button onclick="window.location.reload()" class="px-6 py-2.5 rounded-full bg-red-600 text-white font-medium hover:bg-red-700 transition shadow-lg shadow-red-500/30">Coba Refresh</button>
         </div>
         <p class="mt-10 text-xs text-gray-400 font-mono">Status Code: 503 Service Unavailable</p>
     </div>
 
-    <!-- ADMIN MAINTENANCE ALERT (Only visible to admin) -->
+    <!-- ADMIN MAINTENANCE ALERT -->
     <div id="adminMaintAlert" class="bg-yellow-500 text-white text-center text-xs font-bold py-1 hidden z-[60] sticky top-0 shadow-md">
         <i class="fa-solid fa-triangle-exclamation mr-1"></i> MODE MAINTENANCE AKTIF - User tidak bisa melihat toko.
     </div>
 
-    <!-- ADMIN FLOATING BUTTONS -->
+    <!-- ADMIN PANEL -->
     <div id="adminPanel" class="fixed bottom-6 right-6 z-50 hidden flex flex-col gap-3 animate-fade-in-up">
-        <!-- Tombol Ganti Password -->
-        <button onclick="changePasswordModal()" class="bg-yellow-500 hover:bg-yellow-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-110 tooltip" title="Ganti Password">
-            <i class="fa-solid fa-key text-xl"></i>
-        </button>
-        
-        <!-- Tombol Maintenance Mode -->
-        <button id="btnMaintenanceToggle" onclick="toggleMaintenance()" class="bg-gray-700 hover:bg-gray-800 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-110 tooltip" title="Maintenance Mode">
-            <i class="fa-solid fa-power-off text-xl"></i>
-        </button>
-        
-        <!-- Tombol Edit Info (NEW) -->
-        <button onclick="editInfoTextModal()" class="bg-cyan-500 hover:bg-cyan-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-110 tooltip" title="Edit Info Running">
-            <i class="fa-solid fa-bullhorn text-xl"></i>
-        </button>
-
-        <!-- Tombol Kelola Kategori -->
-        <button onclick="showCategoryManager()" class="bg-indigo-600 hover:bg-indigo-700 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-110 tooltip" title="Kelola Kategori">
-            <i class="fa-solid fa-tags text-xl"></i>
-        </button>
-        
-        <!-- Tombol Logout -->
-        <button onclick="logoutAdmin()" class="bg-gray-600 hover:bg-gray-700 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-110 tooltip" title="Logout">
-            <i class="fa-solid fa-right-from-bracket text-xl"></i>
-        </button>
-        
-        <!-- Tombol Tambah -->
-        <button onclick="showAddProductModal()" class="bg-red-600 hover:bg-red-700 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-110 tooltip" title="Tambah Produk">
-            <i class="fa-solid fa-plus text-2xl"></i>
-        </button>
+        <button onclick="changePasswordModal()" class="bg-yellow-500 hover:bg-yellow-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-110 tooltip" title="Ganti Password"><i class="fa-solid fa-key text-xl"></i></button>
+        <button id="btnMaintenanceToggle" onclick="toggleMaintenance()" class="bg-gray-700 hover:bg-gray-800 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-110 tooltip" title="Maintenance Mode"><i class="fa-solid fa-power-off text-xl"></i></button>
+        <button onclick="editInfoTextModal()" class="bg-cyan-500 hover:bg-cyan-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-110 tooltip" title="Edit Info Running"><i class="fa-solid fa-bullhorn text-xl"></i></button>
+        <button onclick="showCategoryManager()" class="bg-indigo-600 hover:bg-indigo-700 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-110 tooltip" title="Kelola Kategori"><i class="fa-solid fa-tags text-xl"></i></button>
+        <button onclick="logoutAdmin()" class="bg-gray-600 hover:bg-gray-700 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-110 tooltip" title="Logout"><i class="fa-solid fa-right-from-bracket text-xl"></i></button>
+        <button onclick="showAddProductModal()" class="bg-red-600 hover:bg-red-700 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-110 tooltip" title="Tambah Produk"><i class="fa-solid fa-plus text-2xl"></i></button>
     </div>
 
     <!-- NAVBAR -->
@@ -133,8 +85,7 @@
                 </div>
                 <div>
                     <a href="https://t.me/srpcomstorebot" target="_blank" class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-full text-sm font-medium transition duration-200 shadow-lg shadow-red-500/30 flex items-center gap-2">
-                        <i class="fa-brands fa-telegram text-lg"></i> 
-                        <span class="hidden sm:inline">Buka Bot</span>
+                        <i class="fa-brands fa-telegram text-lg"></i> <span class="hidden sm:inline">Buka Bot</span>
                     </a>
                 </div>
             </div>
@@ -143,58 +94,42 @@
 
     <!-- HERO -->
     <header class="gradient-header text-white py-12 md:py-20 -mt-[1px] relative overflow-hidden"> 
-        <!-- Background Pattern -->
         <div class="absolute top-0 left-0 w-full h-full opacity-10">
              <i class="fa-solid fa-wifi absolute top-10 left-10 text-6xl"></i>
              <i class="fa-solid fa-clock absolute bottom-10 right-10 text-8xl"></i>
              <i class="fa-solid fa-shield-halved absolute top-20 right-20 text-5xl"></i>
         </div>
-
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
             <span class="bg-red-500/30 text-red-50 py-1 px-3 rounded-full text-xs font-semibold mb-4 inline-block border border-red-400/30">Trusted Digital Store</span>
             <h1 class="text-3xl md:text-5xl font-bold mb-4 drop-shadow-xl tracking-tight">Solusi Kebutuhan Digital</h1>
-            <p class="text-red-100 text-lg md:text-xl max-w-2xl mx-auto mb-8 font-light">
-                Menyediakan Paket Data, VPN Premium, Perpanjang Masa Aktif, dan Akun Streaming.
-            </p>
+            <p class="text-red-100 text-lg md:text-xl max-w-2xl mx-auto mb-8 font-light">Menyediakan Paket Data, VPN Premium, Perpanjang Masa Aktif, dan Akun Streaming.</p>
             <div class="max-w-xl mx-auto relative group">
                 <div class="absolute -inset-1 bg-red-500 rounded-full blur opacity-40 group-hover:opacity-60 transition duration-200"></div>
-                <input type="text" id="searchInput" placeholder="Cari produk (contoh: Masa Aktif, VPN, 15GB)..." 
-                    class="relative w-full px-6 py-4 rounded-full text-gray-800 shadow-xl focus:outline-none focus:ring-4 focus:ring-red-500/30 transition placeholder-gray-400 border-none">
-                <button class="absolute right-3 top-3 bg-red-600 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center hover:bg-red-700 transition shadow-lg z-10">
-                    <i class="fa-solid fa-search"></i>
-                </button>
+                <input type="text" id="searchInput" placeholder="Cari produk (contoh: Masa Aktif, VPN, 15GB)..." class="relative w-full px-6 py-4 rounded-full text-gray-800 shadow-xl focus:outline-none focus:ring-4 focus:ring-red-500/30 transition placeholder-gray-400 border-none">
+                <button class="absolute right-3 top-3 bg-red-600 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center hover:bg-red-700 transition shadow-lg z-10"><i class="fa-solid fa-search"></i></button>
             </div>
         </div>
     </header>
 
     <!-- MAIN CONTENT -->
     <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 w-full">
-        
-        <!-- Info Banner (DYNAMIC) -->
+        <!-- Info Banner -->
         <div class="bg-white border-l-4 border-red-500 p-4 mb-8 rounded-r-xl shadow-sm flex items-start sm:items-center gap-4 hover:shadow-md transition-shadow">
-            <div class="flex-shrink-0 text-red-600 bg-red-50 p-3 rounded-full">
-                <i class="fa-solid fa-bullhorn text-lg"></i>
-            </div>
+            <div class="flex-shrink-0 text-red-600 bg-red-50 p-3 rounded-full"><i class="fa-solid fa-bullhorn text-lg"></i></div>
             <div class="text-sm text-gray-600">
                 <span class="font-bold text-gray-800 block sm:inline mb-1 sm:mb-0">Info Terbaru:</span> 
-                <!-- Area ini sekarang dinamis -->
-                <span id="dynamicInfoText" class="inline-block">
-                    Loading info...
-                </span>
+                <span id="dynamicInfoText" class="inline-block">Loading info...</span>
             </div>
         </div>
 
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-            <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                <i class="fa-solid fa-layer-group text-red-600"></i> Katalog Produk
-            </h2>
+            <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2"><i class="fa-solid fa-layer-group text-red-600"></i> Katalog Produk</h2>
             <span class="text-xs font-bold text-red-600 bg-red-50 px-3 py-1.5 rounded-full border border-red-100" id="productCount">Loading...</span>
         </div>
 
         <!-- Filter Tabs -->
         <div class="flex space-x-2 mb-8 overflow-x-auto pb-4 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0" id="categoryTabs">
             <button onclick="filterCategory('all')" class="category-btn cat-btn-active whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300">Semua</button>
-            <!-- Placeholders -->
             <div class="animate-pulse bg-gray-200 h-10 w-24 rounded-full"></div>
             <div class="animate-pulse bg-gray-200 h-10 w-24 rounded-full"></div>
         </div>
@@ -208,9 +143,7 @@
         <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden"></div>
         
         <div id="noResults" class="hidden text-center py-20 bg-white rounded-2xl border border-gray-100 shadow-sm">
-            <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fa-solid fa-box-open text-gray-400 text-3xl"></i>
-            </div>
+            <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-box-open text-gray-400 text-3xl"></i></div>
             <h3 class="text-lg font-bold text-gray-900">Produk tidak ditemukan</h3>
             <p class="text-gray-500 mt-1 text-sm">Coba cari di kategori lain atau gunakan kata kunci berbeda.</p>
         </div>
@@ -221,30 +154,12 @@
         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-600 to-transparent opacity-50"></div>
         <div class="max-w-7xl mx-auto px-4 text-center relative z-10">
             <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-10 flex-wrap">
-                <!-- Tombol Panduan -->
-                <button onclick="showCaraOrder()" class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white border border-gray-700 hover:border-gray-600 transition-all flex items-center justify-center gap-3 group">
-                    <i class="fa-solid fa-circle-question text-red-500 group-hover:scale-110 transition-transform"></i>
-                    <span class="font-medium">Panduan Order</span>
-                </button>
-                <!-- Tombol Join Group -->
-                <a href="https://t.me/srpcomgroup" target="_blank" class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-red-600 hover:bg-red-500 text-white flex items-center justify-center gap-3 shadow-lg shadow-red-600/30 group hover:-translate-y-1 transition-all">
-                    <i class="fa-brands fa-telegram text-xl group-hover:rotate-12 transition-transform"></i>
-                    <span class="font-bold tracking-wide">Gabung Grup</span>
-                </a>
-                <!-- Tombol Hubungi Admin -->
-                <button onclick="showContactAdmin()" class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white text-gray-800 hover:bg-gray-100 border border-transparent hover:border-gray-300 transition-all flex items-center justify-center gap-3 group shadow-lg">
-                    <i class="fa-solid fa-headset text-red-600 text-lg group-hover:scale-110 transition-transform"></i>
-                    <span class="font-bold">Hubungi Admin</span>
-                </button>
-                <!-- Tombol Tools -->
-                <button onclick="showTools()" class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-gray-800 hover:bg-black text-white border border-gray-700 hover:border-gray-900 transition-all flex items-center justify-center gap-3 group shadow-lg">
-                    <i class="fa-solid fa-toolbox text-red-500 text-lg group-hover:scale-110 transition-transform"></i>
-                    <span class="font-bold">Tools</span>
-                </button>
+                <button onclick="showCaraOrder()" class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white border border-gray-700 hover:border-gray-600 transition-all flex items-center justify-center gap-3 group"><i class="fa-solid fa-circle-question text-red-500 group-hover:scale-110 transition-transform"></i><span class="font-medium">Panduan Order</span></button>
+                <a href="https://t.me/srpcomgroup" target="_blank" class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-red-600 hover:bg-red-500 text-white flex items-center justify-center gap-3 shadow-lg shadow-red-600/30 group hover:-translate-y-1 transition-all"><i class="fa-brands fa-telegram text-xl group-hover:rotate-12 transition-transform"></i><span class="font-bold tracking-wide">Gabung Grup</span></a>
+                <button onclick="showContactAdmin()" class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white text-gray-800 hover:bg-gray-100 border border-transparent hover:border-gray-300 transition-all flex items-center justify-center gap-3 group shadow-lg"><i class="fa-solid fa-headset text-red-600 text-lg group-hover:scale-110 transition-transform"></i><span class="font-bold">Hubungi Admin</span></button>
+                <button onclick="showTools()" class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-gray-800 hover:bg-black text-white border border-gray-700 hover:border-gray-900 transition-all flex items-center justify-center gap-3 group shadow-lg"><i class="fa-solid fa-toolbox text-red-500 text-lg group-hover:scale-110 transition-transform"></i><span class="font-bold">Tools</span></button>
             </div>
-            <div class="text-xs text-gray-500 font-light pt-8 mt-4 border-t border-gray-800">
-                &copy; <script>document.write(new Date().getFullYear())</script> SRPCOM Store. All Rights Reserved.
-            </div>
+            <div class="text-xs text-gray-500 font-light pt-8 mt-4 border-t border-gray-800">&copy; <script>document.write(new Date().getFullYear())</script> SRPCOM Store. All Rights Reserved.</div>
         </div>
     </footer>
 
@@ -274,323 +189,123 @@
         window.onload = () => { checkAdminHash(); fetchProducts(); };
         window.onhashchange = checkAdminHash;
 
-        // --- AUTH SYSTEM ---
         function checkAdminHash() {
             if (window.location.hash === '#admin') {
-                if (isAdmin) {
-                    adminPanel.classList.remove('hidden');
-                    return;
-                }
+                if (isAdmin) { adminPanel.classList.remove('hidden'); return; }
                 promptLogin();
             }
         }
 
         function promptLogin(errorMessage = null) {
             Swal.fire({
-                title: errorMessage ? 'Login Gagal' : 'Admin Login',
-                text: errorMessage ? errorMessage : 'Masukkan password admin',
-                input: 'password',
-                inputPlaceholder: 'Password',
-                icon: errorMessage ? 'error' : 'lock',
-                showCancelButton: true,
-                confirmButtonText: 'Masuk',
-                confirmButtonColor: '#dc2626',
-                allowOutsideClick: false,
-                didOpen: () => { if(errorMessage) Swal.getInput().focus(); }
+                title: errorMessage ? 'Login Gagal' : 'Admin Login', text: errorMessage ? errorMessage : 'Masukkan password admin', input: 'password', inputPlaceholder: 'Password', icon: errorMessage ? 'error' : 'lock', showCancelButton: true, confirmButtonText: 'Masuk', confirmButtonColor: '#dc2626', allowOutsideClick: false, didOpen: () => { if(errorMessage) Swal.getInput().focus(); }
             }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({ title: 'Memverifikasi...', didOpen: () => Swal.showLoading() });
-                    verifyPasswordViaGet(result.value);
-                } else {
-                    history.pushState("", document.title, window.location.pathname);
-                }
+                if (result.isConfirmed) { Swal.fire({ title: 'Memverifikasi...', didOpen: () => Swal.showLoading() }); verifyPasswordViaGet(result.value); } else { history.pushState("", document.title, window.location.pathname); }
             });
         }
 
         async function verifyPasswordViaGet(password) {
             try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: 'login', password: password })
-                });
+                const response = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'login', password: password }) });
                 const result = await response.json();
-                
                 if (result.status === 'success') {
-                    adminToken = password;
-                    isAdmin = true;
-                    adminPanel.classList.remove('hidden');
-                    checkMaintenanceUI();
-                    applyFilters();
-                    Swal.fire({title: 'Login Berhasil', icon: 'success', timer: 1500, showConfirmButton: false});
-                } else {
-                    promptLogin("Password salah! Silakan ulangi.");
-                }
-            } catch (e) {
-                console.error(e);
-                promptLogin("Gagal terhubung server. Coba lagi.");
-            }
+                    adminToken = password; isAdmin = true; adminPanel.classList.remove('hidden'); checkMaintenanceUI(); applyFilters(); Swal.fire({title: 'Login Berhasil', icon: 'success', timer: 1500, showConfirmButton: false});
+                } else { promptLogin("Password salah! Silakan ulangi."); }
+            } catch (e) { console.error(e); promptLogin("Gagal terhubung server. Coba lagi."); }
         }
 
         function changePasswordModal() {
             Swal.fire({
-                title: 'Ganti Password',
-                input: 'text',
-                inputPlaceholder: 'Password Baru',
-                showCancelButton: true,
-                confirmButtonText: 'Simpan',
-                confirmButtonColor: '#eab308',
-                preConfirm: (newPass) => {
-                    if (!newPass) Swal.showValidationMessage("Password tidak boleh kosong");
-                    return newPass;
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    postData({ action: 'changePassword', newPassword: result.value }, 'Password Berhasil Diubah!');
-                }
-            });
+                title: 'Ganti Password', input: 'text', inputPlaceholder: 'Password Baru', showCancelButton: true, confirmButtonText: 'Simpan', confirmButtonColor: '#eab308', preConfirm: (newPass) => { if (!newPass) Swal.showValidationMessage("Password tidak boleh kosong"); return newPass; }
+            }).then((result) => { if (result.isConfirmed) postData({ action: 'changePassword', newPassword: result.value }, 'Password Berhasil Diubah!'); });
         }
 
         function logoutAdmin() {
-            Swal.fire({
-                title: 'Keluar?', icon: 'question',
-                showCancelButton: true, confirmButtonText: 'Ya', confirmButtonColor: '#dc2626'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    isAdmin = false; adminToken = '';
-                    adminPanel.classList.add('hidden');
-                    history.pushState("", document.title, window.location.pathname);
-                    checkMaintenanceUI(); 
-                    applyFilters();
-                    Swal.fire({title: 'Logout Berhasil', icon: 'success', timer: 1000, showConfirmButton: false});
-                }
+            Swal.fire({ title: 'Keluar?', icon: 'question', showCancelButton: true, confirmButtonText: 'Ya', confirmButtonColor: '#dc2626' }).then((result) => {
+                if (result.isConfirmed) { isAdmin = false; adminToken = ''; adminPanel.classList.add('hidden'); history.pushState("", document.title, window.location.pathname); checkMaintenanceUI(); applyFilters(); Swal.fire({title: 'Logout Berhasil', icon: 'success', timer: 1000, showConfirmButton: false}); }
             });
         }
 
-        // --- INFO TEXT EDITING (NEW) ---
         function editInfoTextModal() {
             Swal.fire({
-                title: 'Edit Info Terbaru',
-                input: 'textarea',
-                inputValue: currentInfoText,
-                inputLabel: 'HTML Tag Diperbolehkan (<b>, <br>, <span>)',
-                inputPlaceholder: 'Masukkan teks info...',
-                showCancelButton: true,
-                confirmButtonText: 'Update Info',
-                confirmButtonColor: '#06b6d4', // Cyan
-                customClass: { input: 'h-32 text-sm' }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    postData({ action: 'updateInfoText', text: result.value }, 'Info berhasil diupdate!');
-                    // Optimistic UI Update
-                    currentInfoText = result.value;
-                    dynamicInfoText.innerHTML = result.value;
-                }
-            });
+                title: 'Edit Info Terbaru', input: 'textarea', inputValue: currentInfoText, inputLabel: 'HTML Tag Diperbolehkan (<b>, <br>, <span>)', inputPlaceholder: 'Masukkan teks info...', showCancelButton: true, confirmButtonText: 'Update Info', confirmButtonColor: '#06b6d4', customClass: { input: 'h-32 text-sm' }
+            }).then((result) => { if (result.isConfirmed) { postData({ action: 'updateInfoText', text: result.value }, 'Info berhasil diupdate!'); currentInfoText = result.value; dynamicInfoText.innerHTML = result.value; } });
         }
 
-        // --- MAINTENANCE LOGIC ---
         function checkMaintenanceUI() {
             if (isMaintenanceMode) {
-                btnMaintenanceToggle.classList.remove('bg-gray-700', 'hover:bg-gray-800');
-                btnMaintenanceToggle.classList.add('bg-green-500', 'hover:bg-green-600'); 
-                btnMaintenanceToggle.innerHTML = '<i class="fa-solid fa-power-off text-xl"></i>';
+                btnMaintenanceToggle.classList.remove('bg-gray-700', 'hover:bg-gray-800'); btnMaintenanceToggle.classList.add('bg-green-500', 'hover:bg-green-600'); btnMaintenanceToggle.innerHTML = '<i class="fa-solid fa-power-off text-xl"></i>';
+                if (isAdmin) { maintenanceScreen.classList.add('hidden'); adminMaintAlert.classList.remove('hidden'); document.body.style.overflow = 'auto'; } 
+                else { maintenanceScreen.classList.remove('hidden'); adminMaintAlert.classList.add('hidden'); document.body.style.overflow = 'hidden'; }
             } else {
-                btnMaintenanceToggle.classList.add('bg-gray-700', 'hover:bg-gray-800');
-                btnMaintenanceToggle.classList.remove('bg-green-500', 'hover:bg-green-600');
-            }
-
-            if (isMaintenanceMode) {
-                if (isAdmin) {
-                    maintenanceScreen.classList.add('hidden');
-                    adminMaintAlert.classList.remove('hidden');
-                    document.body.style.overflow = 'auto'; 
-                } else {
-                    maintenanceScreen.classList.remove('hidden');
-                    adminMaintAlert.classList.add('hidden');
-                    document.body.style.overflow = 'hidden';
-                }
-            } else {
-                maintenanceScreen.classList.add('hidden');
-                adminMaintAlert.classList.add('hidden');
-                document.body.style.overflow = 'auto';
+                btnMaintenanceToggle.classList.add('bg-gray-700', 'hover:bg-gray-800'); btnMaintenanceToggle.classList.remove('bg-green-500', 'hover:bg-green-600'); maintenanceScreen.classList.add('hidden'); adminMaintAlert.classList.add('hidden'); document.body.style.overflow = 'auto';
             }
         }
 
         async function toggleMaintenance() {
-            const newState = !isMaintenanceMode;
-            const actionText = newState ? "AKTIFKAN" : "MATIKAN";
-            const confirmColor = newState ? "#ef4444" : "#22c55e"; 
-
-            Swal.fire({
-                title: `${actionText} Maintenance?`,
-                text: newState ? "Pengunjung tidak akan bisa melihat toko." : "Toko akan kembali bisa diakses publik.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: `Ya, ${actionText}`,
-                confirmButtonColor: confirmColor
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    postData({ action: 'toggleMaintenance', status: newState }, null, (res) => {
-                         isMaintenanceMode = newState;
-                         checkMaintenanceUI();
-                         Swal.fire('Sukses', `Maintenance Mode: ${newState ? 'ON' : 'OFF'}`, 'success');
-                    });
-                }
+            const newState = !isMaintenanceMode; const actionText = newState ? "AKTIFKAN" : "MATIKAN"; const confirmColor = newState ? "#ef4444" : "#22c55e";
+            Swal.fire({ title: `${actionText} Maintenance?`, text: newState ? "Pengunjung tidak akan bisa melihat toko." : "Toko akan kembali bisa diakses publik.", icon: 'warning', showCancelButton: true, confirmButtonText: `Ya, ${actionText}`, confirmButtonColor: confirmColor }).then((result) => {
+                if (result.isConfirmed) { postData({ action: 'toggleMaintenance', status: newState }, null, (res) => { isMaintenanceMode = newState; checkMaintenanceUI(); Swal.fire('Sukses', `Maintenance Mode: ${newState ? 'ON' : 'OFF'}`, 'success'); }); }
             });
         }
 
-        // --- DATA HANDLING ---
         async function fetchProducts() {
             try {
                 loadingDiv.classList.remove('hidden'); productGrid.classList.add('hidden');
-                const response = await fetch(API_URL);
-                const result = await response.json();
-                
+                const response = await fetch(API_URL); const result = await response.json();
                 if (result.status === 'success') { 
-                    products = result.data;
-                    
-                    // Update Settings from Server
-                    isMaintenanceMode = result.maintenance;
-                    currentInfoText = result.infoText || "Info belum diset.";
-                    dynamicInfoText.innerHTML = currentInfoText; // Render HTML
-
-                    checkMaintenanceUI();
-                    renderCategoryTabs(products); 
-                    applyFilters(); 
-                } else { 
-                    Swal.fire('Error', 'Gagal memuat data.', 'error'); 
-                }
-            } catch (error) { 
-                console.error(error);
-                Swal.fire('Koneksi Error', 'Gagal terhubung database.', 'error'); 
-            } finally { 
-                loadingDiv.classList.add('hidden'); productGrid.classList.remove('hidden'); 
-            }
+                    products = result.data; isMaintenanceMode = result.maintenance; currentInfoText = result.infoText || "Info belum diset."; dynamicInfoText.innerHTML = currentInfoText; checkMaintenanceUI(); renderCategoryTabs(products); applyFilters(); 
+                } else { Swal.fire('Error', 'Gagal memuat data.', 'error'); }
+            } catch (error) { console.error(error); Swal.fire('Koneksi Error', 'Gagal terhubung database.', 'error'); } finally { loadingDiv.classList.add('hidden'); productGrid.classList.remove('hidden'); }
         }
 
         async function postData(payload, successMsg, customCallback = null) {
             Swal.fire({ title: 'Memproses...', didOpen: () => Swal.showLoading() });
             try {
-                const body = JSON.stringify({ ...payload, password: adminToken });
-                const response = await fetch(API_URL, { method: 'POST', body: body });
-                const result = await response.json();
-
-                if (result.status === 'success') {
-                    if (customCallback) {
-                        customCallback(result);
-                    } else {
-                        setTimeout(() => { Swal.fire('Sukses', successMsg || result.message, 'success'); fetchProducts(); }, 1000);
-                    }
-                } else {
-                    Swal.fire('Gagal', result.message, 'error');
-                }
-            } catch (error) { 
-                Swal.fire('Error', 'Gagal menghubungi server.', 'error'); 
-            }
+                const body = JSON.stringify({ ...payload, password: adminToken }); const response = await fetch(API_URL, { method: 'POST', body: body }); const result = await response.json();
+                if (result.status === 'success') { if (customCallback) customCallback(result); else setTimeout(() => { Swal.fire('Sukses', successMsg || result.message, 'success'); fetchProducts(); }, 1000); } else Swal.fire('Gagal', result.message, 'error');
+            } catch (error) { Swal.fire('Error', 'Gagal menghubungi server.', 'error'); }
         }
 
-        // --- CATEGORY MANAGEMENT ---
         function getUniqueCategories(data) {
-            return [...new Set(data.map(p => {
-                if(!p.category || p.category === 'combo' || p.category === 'flexmax') return 'internet';
-                return p.category;
-            }))].sort();
+            return [...new Set(data.map(p => { if(!p.category || p.category === 'combo' || p.category === 'flexmax') return 'internet'; return p.category; }))].sort();
         }
 
         function showCategoryManager() {
             const uniqueCats = getUniqueCategories(products);
             let listHtml = `<div class="flex flex-col gap-2 mt-4 max-h-[300px] overflow-y-auto pr-2">`;
             uniqueCats.forEach(cat => {
-                let displayName = cat.charAt(0).toUpperCase() + cat.slice(1);
-                const style = getCategoryStyle(cat, null);
-                if(style.text !== 'Other') displayName = style.label;
-                listHtml += `
-                    <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-200">
-                        <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 rounded-full bg-gradient-to-br ${style.color} flex items-center justify-center text-white text-xs">
-                                <i class="${style.icon}"></i>
-                            </div>
-                            <span class="text-sm font-bold text-gray-700 capitalize">${cat} (${displayName})</span>
-                        </div>
-                        <div class="flex gap-1">
-                            <button onclick="handleRenameCategory('${cat}')" class="w-8 h-8 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition" title="Ganti Nama"><i class="fa-solid fa-pen"></i></button>
-                            <button onclick="handleDeleteCategory('${cat}')" class="w-8 h-8 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition" title="Hapus/Pindahkan"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    </div>`;
+                let displayName = cat.charAt(0).toUpperCase() + cat.slice(1); const style = getCategoryStyle(cat, null); if(style.text !== 'Other') displayName = style.label;
+                listHtml += `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-200"><div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-gradient-to-br ${style.color} flex items-center justify-center text-white text-xs"><i class="${style.icon}"></i></div><span class="text-sm font-bold text-gray-700 capitalize">${cat} (${displayName})</span></div><div class="flex gap-1"><button onclick="handleRenameCategory('${cat}')" class="w-8 h-8 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition" title="Ganti Nama"><i class="fa-solid fa-pen"></i></button><button onclick="handleDeleteCategory('${cat}')" class="w-8 h-8 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition" title="Hapus/Pindahkan"><i class="fa-solid fa-trash"></i></button></div></div>`;
             });
-            listHtml += `</div>`;
-            if(uniqueCats.length === 0) listHtml = '<p class="text-center text-gray-500 my-4">Belum ada kategori.</p>';
-            Swal.fire({
-                title: '<span class="text-xl font-bold">Kelola Kategori</span>',
-                html: `<p class="text-xs text-gray-500 mb-2">Ubah nama kategori atau hapus (pindahkan isi) kategori.</p>${listHtml}`,
-                showConfirmButton: false, showCloseButton: true, width: '500px'
-            });
+            listHtml += `</div>`; if(uniqueCats.length === 0) listHtml = '<p class="text-center text-gray-500 my-4">Belum ada kategori.</p>';
+            Swal.fire({ title: '<span class="text-xl font-bold">Kelola Kategori</span>', html: `<p class="text-xs text-gray-500 mb-2">Ubah nama kategori atau hapus (pindahkan isi) kategori.</p>${listHtml}`, showConfirmButton: false, showCloseButton: true, width: '500px' });
         }
 
         function handleRenameCategory(oldCat) {
-            Swal.fire({
-                title: `Ganti nama '${oldCat}'`,
-                input: 'text', inputValue: oldCat, inputPlaceholder: 'Nama Kategori Baru',
-                showCancelButton: true, confirmButtonText: 'Simpan', confirmButtonColor: '#3b82f6',
-                preConfirm: (val) => {
-                    if (!val) return Swal.showValidationMessage("Nama tidak boleh kosong");
-                    return val.toLowerCase().trim().replace(/\s+/g, '');
-                }
-            }).then((result) => {
-                if (result.isConfirmed && result.value !== oldCat) {
-                    postData({ action: 'massUpdateCategory', oldCategory: oldCat, newCategory: result.value }, `Kategori diubah jadi '${result.value}'`);
-                }
-            });
+            Swal.fire({ title: `Ganti nama '${oldCat}'`, input: 'text', inputValue: oldCat, inputPlaceholder: 'Nama Kategori Baru', showCancelButton: true, confirmButtonText: 'Simpan', confirmButtonColor: '#3b82f6', preConfirm: (val) => { if (!val) return Swal.showValidationMessage("Nama tidak boleh kosong"); return val.toLowerCase().trim().replace(/\s+/g, ''); } }).then((result) => { if (result.isConfirmed && result.value !== oldCat) postData({ action: 'massUpdateCategory', oldCategory: oldCat, newCategory: result.value }, `Kategori diubah jadi '${result.value}'`); });
         }
 
         function handleDeleteCategory(catToDelete) {
-            const otherCats = getUniqueCategories(products).filter(c => c !== catToDelete);
-            if(!otherCats.includes('lainnya')) otherCats.push('lainnya');
-            let optionsHtml = otherCats.map(c => `<option value="${c}">${c}</option>`).join('');
-            Swal.fire({
-                title: `Hapus Kategori '${catToDelete}'?`,
-                html: `<p class="text-sm text-gray-600 mb-4">Produk di dalam kategori ini harus dipindahkan agar tidak hilang.</p><label class="text-xs font-bold text-gray-500 uppercase">Pindahkan produk ke:</label><select id="move-target" class="swal2-input !m-0 !w-full mt-1">${optionsHtml}</select>`,
-                icon: 'warning', showCancelButton: true, confirmButtonText: 'Pindahkan & Hapus', confirmButtonColor: '#dc2626',
-                preConfirm: () => document.getElementById('move-target').value
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    postData({ action: 'massUpdateCategory', oldCategory: catToDelete, newCategory: result.value }, `Produk dipindah ke '${result.value}'`);
-                }
-            });
+            const otherCats = getUniqueCategories(products).filter(c => c !== catToDelete); if(!otherCats.includes('lainnya')) otherCats.push('lainnya'); let optionsHtml = otherCats.map(c => `<option value="${c}">${c}</option>`).join('');
+            Swal.fire({ title: `Hapus Kategori '${catToDelete}'?`, html: `<p class="text-sm text-gray-600 mb-4">Produk di dalam kategori ini harus dipindahkan agar tidak hilang.</p><label class="text-xs font-bold text-gray-500 uppercase">Pindahkan produk ke:</label><select id="move-target" class="swal2-input !m-0 !w-full mt-1">${optionsHtml}</select>`, icon: 'warning', showCancelButton: true, confirmButtonText: 'Pindahkan & Hapus', confirmButtonColor: '#dc2626', preConfirm: () => document.getElementById('move-target').value }).then((result) => { if (result.isConfirmed) postData({ action: 'massUpdateCategory', oldCategory: catToDelete, newCategory: result.value }, `Produk dipindah ke '${result.value}'`); });
         }
 
-        // --- DYNAMIC TABS ---
         function renderCategoryTabs(data) {
-            const uniqueCategories = getUniqueCategories(data);
-            const priority = ['internet', 'masaaktif', 'vpn', 'apps'];
-            uniqueCategories.sort((a, b) => {
-                const idxA = priority.indexOf(a); const idxB = priority.indexOf(b);
-                if (idxA !== -1 && idxB !== -1) return idxA - idxB;
-                if (idxA !== -1) return -1; if (idxB !== -1) return 1;
-                return a.localeCompare(b);
-            });
+            const uniqueCategories = getUniqueCategories(data); const priority = ['internet', 'masaaktif', 'vpn', 'apps'];
+            uniqueCategories.sort((a, b) => { const idxA = priority.indexOf(a); const idxB = priority.indexOf(b); if (idxA !== -1 && idxB !== -1) return idxA - idxB; if (idxA !== -1) return -1; if (idxB !== -1) return 1; return a.localeCompare(b); });
             let html = `<button onclick="filterCategory('all')" class="category-btn ${currentCategory === 'all' ? 'cat-btn-active' : 'cat-btn-inactive'} whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300">Semua</button>`;
-            uniqueCategories.forEach(cat => {
-                const style = getCategoryStyle(cat, null);
-                const isActive = currentCategory === cat;
-                html += `<button onclick="filterCategory('${cat}')" class="category-btn ${isActive ? 'cat-btn-active' : 'cat-btn-inactive'} whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 capitalize"><i class="${style.icon} mr-1"></i> ${style.label}</button>`;
-            });
+            uniqueCategories.forEach(cat => { const style = getCategoryStyle(cat, null); const isActive = currentCategory === cat; html += `<button onclick="filterCategory('${cat}')" class="category-btn ${isActive ? 'cat-btn-active' : 'cat-btn-inactive'} whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 capitalize"><i class="${style.icon} mr-1"></i> ${style.label}</button>`; });
             categoryTabsContainer.innerHTML = html;
         }
 
-        // --- CRUD MODALS ---
         function showAddProductModal() { openProductModal('Tambah Produk Baru', 'add'); }
         function showEditProductModal(id) { const product = products.find(p => p.id.toString() === id.toString()); if (product) openProductModal('Edit Produk', 'edit', product); }
 
         function openProductModal(title, action, data = null) {
-            let cat = data ? data.category : 'internet';
-            if(cat === 'combo' || cat === 'flexmax') cat = 'internet'; 
-            const existingCats = getUniqueCategories(products);
-            const standardCats = ['internet', 'masaaktif', 'vpn', 'apps'];
-            standardCats.forEach(c => { if(!existingCats.includes(c)) existingCats.push(c); });
-            
-            let catOptions = existingCats.map(c => `<option value="${c}" ${cat === c ? 'selected' : ''}>${c.charAt(0).toUpperCase() + c.slice(1)}</option>`).join('');
-            catOptions += `<option value="custom">Lainnya (Tulis Baru...)</option>`;
+            let cat = data ? data.category : 'internet'; if(cat === 'combo' || cat === 'flexmax') cat = 'internet'; 
+            const existingCats = getUniqueCategories(products); const standardCats = ['internet', 'masaaktif', 'vpn', 'apps']; standardCats.forEach(c => { if(!existingCats.includes(c)) existingCats.push(c); });
+            let catOptions = existingCats.map(c => `<option value="${c}" ${cat === c ? 'selected' : ''}>${c.charAt(0).toUpperCase() + c.slice(1)}</option>`).join(''); catOptions += `<option value="custom">Lainnya (Tulis Baru...)</option>`;
 
             Swal.fire({
                 title: title,
@@ -603,54 +318,35 @@
                         <div id="custom-cat-container" class="hidden mt-2"><input id="swal-category-custom" class="swal2-input !m-0 !w-full bg-gray-50 border-gray-300" placeholder="Masukkan nama kategori baru..."></div>
                         <label class="text-xs font-bold text-gray-500 uppercase mt-2 block">Deskripsi</label>
                         <textarea id="swal-desc" class="swal2-textarea !m-0 !w-full" placeholder="Detail produk..." style="height:100px">${data ? data.desc : ''}</textarea>
-                        <label class="text-xs font-bold text-gray-500 uppercase mt-2 block">Harga</label>
-                        <div class="relative"><span class="absolute left-3 top-3 text-gray-500">Rp</span><input id="swal-price" type="number" class="swal2-input !m-0 !w-full !pl-10" placeholder="0" value="${data ? data.price : ''}"></div>
+                        
+                        <div class="grid grid-cols-2 gap-2 mt-2">
+                             <div>
+                                <label class="text-xs font-bold text-gray-500 uppercase block mb-1">Harga Jual</label>
+                                <div class="relative"><span class="absolute left-3 top-2.5 text-gray-500">Rp</span><input id="swal-price" type="number" class="swal2-input !m-0 !w-full !pl-10" placeholder="0" value="${data ? data.price : ''}"></div>
+                             </div>
+                             <div>
+                                <label class="text-xs font-bold text-gray-500 uppercase block mb-1">Harga Normal (Coret)</label>
+                                <div class="relative"><span class="absolute left-3 top-2.5 text-gray-500">Rp</span><input id="swal-normal-price" type="number" class="swal2-input !m-0 !w-full !pl-10" placeholder="Opsional" value="${data && data.normalPrice ? data.normalPrice : ''}"></div>
+                             </div>
+                        </div>
+                        <p class="text-[10px] text-gray-400 mt-1 italic">*Jika Harga Normal diisi lebih tinggi, akan muncul coretan (diskon). Jika kosong/sama, tidak ada coretan.</p>
                     </div>`,
                 focusConfirm: false, showCancelButton: true, confirmButtonText: 'Simpan', confirmButtonColor: '#dc2626',
-                didOpen: () => {
-                    window.toggleCustomCategory = (el) => {
-                        const customInput = document.getElementById('custom-cat-container');
-                        if(el.value === 'custom') customInput.classList.remove('hidden');
-                        else customInput.classList.add('hidden');
-                    };
-                },
+                didOpen: () => { window.toggleCustomCategory = (el) => { const customInput = document.getElementById('custom-cat-container'); if(el.value === 'custom') customInput.classList.remove('hidden'); else customInput.classList.add('hidden'); }; },
                 preConfirm: () => {
-                    const name = document.getElementById('swal-name').value;
-                    const price = document.getElementById('swal-price').value;
-                    const catSelect = document.getElementById('swal-category-select').value;
-                    let finalCategory = catSelect;
-                    if(catSelect === 'custom') {
-                        const customVal = document.getElementById('swal-category-custom').value;
-                        if(!customVal) return Swal.showValidationMessage('Nama Kategori baru wajib diisi');
-                        finalCategory = customVal.trim().toLowerCase().replace(/\s+/g, ''); 
-                    }
-                    if (!name || !price) return Swal.showValidationMessage('Nama dan Harga wajib diisi');
-                    return { name, category: finalCategory, desc: document.getElementById('swal-desc').value, price }
+                    const name = document.getElementById('swal-name').value; const price = document.getElementById('swal-price').value; const normalPrice = document.getElementById('swal-normal-price').value;
+                    const catSelect = document.getElementById('swal-category-select').value; let finalCategory = catSelect;
+                    if(catSelect === 'custom') { const customVal = document.getElementById('swal-category-custom').value; if(!customVal) return Swal.showValidationMessage('Nama Kategori baru wajib diisi'); finalCategory = customVal.trim().toLowerCase().replace(/\s+/g, ''); }
+                    if (!name || !price) return Swal.showValidationMessage('Nama dan Harga Jual wajib diisi');
+                    return { name, category: finalCategory, desc: document.getElementById('swal-desc').value, price, normalPrice }
                 }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const payload = { action: action, data: result.value };
-                    if (action === 'edit') payload.id = data.id;
-                    postData(payload, action === 'add' ? 'Produk ditambahkan' : 'Produk diperbarui');
-                }
-            });
+            }).then((result) => { if (result.isConfirmed) { const payload = { action: action, data: result.value }; if (action === 'edit') payload.id = data.id; postData(payload, action === 'add' ? 'Produk ditambahkan' : 'Produk diperbarui'); } });
         }
 
-        async function toggleStatus(id, currentStatus) {
-            const actionText = currentStatus ? "Sembunyikan" : "Tampilkan";
-            Swal.fire({
-                title: `${actionText} Produk?`, icon: 'warning', showCancelButton: true, confirmButtonText: `Ya`
-            }).then((result) => {
-                if (result.isConfirmed) postData({ action: 'toggle', id: id, status: !currentStatus }, 'Status berhasil diubah');
-            });
-        }
+        async function toggleStatus(id, currentStatus) { Swal.fire({ title: `${currentStatus ? "Sembunyikan" : "Tampilkan"} Produk?`, icon: 'warning', showCancelButton: true, confirmButtonText: `Ya` }).then((result) => { if (result.isConfirmed) postData({ action: 'toggle', id: id, status: !currentStatus }, 'Status berhasil diubah'); }); }
 
-        // --- RENDER LOGIC ---
         const formatRupiah = (n) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n);
-        const formatDescription = (t) => {
-            if (!t) return '';
-            return '<ul class="text-sm text-gray-600 space-y-2 mb-5">' + t.split(/\n|- /).filter(l => l.trim()).map(l => `<li class="flex items-start gap-2.5"><div class="mt-0.5 min-w-[16px]"><i class="fa-solid fa-check text-red-500 text-xs"></i></div><span class="flex-1 leading-relaxed">${l.replace(/^"|"$/g, '').trim()}</span></li>`).join('') + '</ul>';
-        };
+        const formatDescription = (t) => { if (!t) return ''; return '<ul class="text-sm text-gray-600 space-y-2 mb-5">' + t.split(/\n|- /).filter(l => l.trim()).map(l => `<li class="flex items-start gap-2.5"><div class="mt-0.5 min-w-[16px]"><i class="fa-solid fa-check text-red-500 text-xs"></i></div><span class="flex-1 leading-relaxed">${l.replace(/^"|"$/g, '').trim()}</span></li>`).join('') + '</ul>'; };
 
         function getCategoryStyle(cat, name) {
             if(name && (name.includes('FlexMax') || cat === 'flexmax')) return { icon: 'fa-bolt', color: 'from-red-500 to-red-700', text: 'Internet', label: 'FlexMax' };
@@ -666,23 +362,17 @@
 
         function filterCategory(cat) {
             currentCategory = cat;
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                const isActive = btn.getAttribute('onclick') === `filterCategory('${cat}')`;
-                btn.className = isActive ? 'category-btn cat-btn-active whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 capitalize' : 'category-btn cat-btn-inactive whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 capitalize';
-            });
+            document.querySelectorAll('.category-btn').forEach(btn => { const isActive = btn.getAttribute('onclick') === `filterCategory('${cat}')`; btn.className = isActive ? 'category-btn cat-btn-active whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 capitalize' : 'category-btn cat-btn-inactive whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 capitalize'; });
             applyFilters();
         }
 
         function applyFilters() {
             const term = searchInput.value.toLowerCase();
             let filtered = products.filter(p => {
-                let pCat = p.category;
-                if(!pCat || pCat === 'flexmax' || pCat === 'combo') pCat = 'internet'; 
-                
+                let pCat = p.category; if(!pCat || pCat === 'flexmax' || pCat === 'combo') pCat = 'internet'; 
                 let matchCat = (currentCategory === 'all') || (pCat === currentCategory);
                 const matchSearch = (p.name && p.name.toLowerCase().includes(term)) || (p.desc && p.desc.toLowerCase().includes(term));
                 const matchActive = isAdmin ? true : (p.active === true || p.active === "true" || p.active === 1);
-                
                 return matchCat && matchSearch && matchActive;
             });
             filtered.sort((a, b) => Number(a.price) - Number(b.price));
@@ -702,20 +392,39 @@
                 const style = getCategoryStyle(p.category, p.name);
                 const safeName = p.name ? p.name.replace(/'/g, "\\'") : 'Tanpa Nama';
                 
+                // Logic Harga Coret
+                let priceHtml = '';
+                let discountBadge = '';
+                const normalPrice = Number(p.normalPrice || 0);
+                const sellingPrice = Number(p.price);
+
+                if (normalPrice > sellingPrice) {
+                    const discount = Math.round(((normalPrice - sellingPrice) / normalPrice) * 100);
+                    priceHtml = `
+                        <div class="flex flex-col">
+                             <span class="text-xs text-gray-400 line-through">${formatRupiah(normalPrice)}</span>
+                             <span class="text-xl font-bold text-red-600">${formatRupiah(sellingPrice)}</span>
+                        </div>`;
+                    discountBadge = `<div class="absolute top-0 right-0 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-1 rounded-bl-xl shadow-sm z-10">HEMAT ${discount}%</div>`;
+                } else {
+                    priceHtml = `
+                        <div class="flex flex-col">
+                             <span class="text-[10px] uppercase text-gray-400 font-bold">Harga</span>
+                             <span class="text-xl font-bold text-gray-800">${formatRupiah(sellingPrice)}</span>
+                        </div>`;
+                }
+
                 let adminControls = '';
                 if (isAdmin) {
                     const statusBtn = isActive 
                         ? `<button onclick="toggleStatus('${p.id}', true)" class="bg-gray-800/80 hover:bg-black text-white p-2 rounded-lg backdrop-blur-sm"><i class="fa-solid fa-eye-slash"></i></button>`
                         : `<button onclick="toggleStatus('${p.id}', false)" class="bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg"><i class="fa-solid fa-eye"></i></button>`;
-                    adminControls = `
-                        <div class="absolute top-3 right-3 flex gap-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button onclick="showEditProductModal('${p.id}')" class="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded-lg shadow-sm"><i class="fa-solid fa-pen"></i></button>
-                            ${statusBtn}
-                        </div>`;
+                    adminControls = `<div class="absolute top-3 right-3 flex gap-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity"><button onclick="showEditProductModal('${p.id}')" class="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded-lg shadow-sm"><i class="fa-solid fa-pen"></i></button>${statusBtn}</div>`;
                 }
 
                 card.innerHTML = `
                     <div class="absolute top-0 left-0 bg-${style.color.split(' ')[1].replace('500','100').replace('600','100')} text-${style.color.split(' ')[1].replace('500','700').replace('600','700')} text-[10px] font-bold px-3 py-1.5 rounded-br-xl border-r border-b border-gray-100 shadow-sm z-10">${style.label}</div>
+                    ${discountBadge}
                     ${adminControls}
                     <div class="p-6 flex-grow mt-4">
                         <div class="flex items-start gap-4 mb-4">
@@ -730,7 +439,7 @@
                     </div>
                     <div class="bg-gray-50/80 p-5 border-t border-gray-100 mt-auto backdrop-blur-sm">
                         <div class="flex justify-between items-center">
-                            <div class="flex flex-col"><span class="text-[10px] uppercase text-gray-400 font-bold">Harga</span><span class="text-xl font-bold text-gray-800">${formatRupiah(p.price)}</span></div>
+                            ${priceHtml}
                             <button onclick="showOrderOptions('${safeName}', ${p.price})" class="bg-red-600 hover:bg-red-700 text-white font-medium py-2.5 px-6 rounded-xl shadow-lg shadow-red-500/20 transition-all hover:-translate-y-1 flex items-center gap-2"><span>Beli</span> <i class="fa-solid fa-arrow-right text-sm"></i></button>
                         </div>
                     </div>`;
@@ -741,8 +450,7 @@
         function showOrderOptions(name, price) {
             const formattedPrice = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(price);
             const waMessage = `Halo Admin SRPCOM, saya sudah transfer senilai ${formattedPrice} untuk pembelian: *${name}*. Mohon diproses.`;
-            const waLink = `https://wa.me/6282175037525?text=${encodeURIComponent(waMessage)}`;
-            const tgLink = `https://t.me/srpcomadmin`; 
+            const waLink = `https://wa.me/6282175037525?text=${encodeURIComponent(waMessage)}`; const tgLink = `https://t.me/srpcomadmin`; 
 
             Swal.fire({
                 title: `<span class="text-lg font-bold text-gray-800">${name}</span>`,
@@ -762,7 +470,6 @@
                 showConfirmButton: false, showCloseButton: true, width: '400px', customClass: { popup: 'rounded-2xl shadow-2xl' }
             });
         }
-
         function showContactAdmin() {
             Swal.fire({
                 title: '<span class="text-xl font-bold text-gray-800">Hubungi Admin</span>',
@@ -775,7 +482,6 @@
                 showConfirmButton: false, showCloseButton: true, width: '400px', customClass: { popup: 'rounded-2xl' }
             });
         }
-        
         function showTools() {
             Swal.fire({
                 title: '<span class="text-xl font-bold text-gray-800">Tools & Utilities</span>',
@@ -789,7 +495,6 @@
                 showConfirmButton: false, showCloseButton: true, width: '400px', customClass: { popup: 'rounded-2xl' }
             });
         }
-
         function showCaraOrder() {
              Swal.fire({
                 title: '<span class="text-xl font-bold text-gray-800">Panduan Transaksi</span>',
